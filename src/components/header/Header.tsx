@@ -1,8 +1,12 @@
-import { Menu, X, Palmtree } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Menu, X, Palmtree } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Navigation from './Navigation';
+import MobileMenu from './MobileMenu';
+import { NavigationItem } from '../../types/navigation';
 
-const navigationItems = [
+const navigationItems: NavigationItem[] = [
   { path: '/', label: 'Home' },
   { path: '/healthcare', label: 'Healthcare' },
   { path: '/insurance', label: 'Insurance & Legal' },
@@ -45,23 +49,10 @@ export default function Header() {
             <span className="text-2xl font-semibold text-gray-800">Serenity Haven</span>
           </Link>
           
-          <div className="hidden md:flex space-x-8">
-            {navigationItems.map((item) => (
-              <Link 
-                key={item.path}
-                to={item.path}
-                className={`transition-colors ${isActive(item.path)}`}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <button 
-              onClick={handleContactClick}
-              className="text-gray-600 hover:text-teal-600 transition-colors"
-            >
-              Contact
-            </button>
-          </div>
+          <Navigation 
+            items={navigationItems} 
+            isActive={isActive} 
+          />
 
           <button 
             className="md:hidden"
@@ -72,25 +63,13 @@ export default function Header() {
           </button>
         </div>
 
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4">
-            {navigationItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => handleNavigation(item.path)}
-                className={`block w-full text-left py-2 ${isActive(item.path)}`}
-              >
-                {item.label}
-              </button>
-            ))}
-            <button 
-              onClick={handleContactClick}
-              className="block w-full text-left py-2 text-gray-600 hover:text-teal-600 transition-colors"
-            >
-              Contact
-            </button>
-          </div>
-        )}
+        <MobileMenu 
+          items={navigationItems}
+          isActive={isActive}
+          onItemClick={handleNavigation}
+          onContactClick={handleContactClick}
+          isOpen={isMenuOpen}
+        />
       </nav>
     </header>
   );
