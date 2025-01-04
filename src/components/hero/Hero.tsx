@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import HeroSlide from './HeroSlide';
 import { heroContent } from './HeroContent';
 
@@ -30,12 +31,12 @@ export default function Hero() {
               {content.description}
             </p>
             <div>
-              <a 
-                href="#contact" 
+              <Link 
+                to="/contact" 
                 className="inline-block px-8 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
               >
                 Start Your Journey
-              </a>
+              </Link>
             </div>
           </HeroSlide>
         </div>
