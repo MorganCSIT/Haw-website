@@ -9,7 +9,8 @@ const navigationItems = [
   { path: '/vacations', label: 'Assisted Vacations' },
   { path: '/property', label: 'Property Investment' },
   { path: '/events', label: 'Community' },
-  { path: '/blog', label: 'Blog' }
+  { path: '/blog', label: 'Blog' },
+  { path: '/contact', label: 'Contact' }
 ];
 
 export default function Header() {
@@ -20,16 +21,6 @@ export default function Header() {
   const handleNavigation = (path: string) => {
     setIsMenuOpen(false);
     navigate(path);
-  };
-
-  const handleContactClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsMenuOpen(false);
-    if (location.pathname === '/') {
-      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/?contact=true');
-    }
   };
 
   const isActive = (path: string) => {
@@ -55,12 +46,6 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
-            <button 
-              onClick={handleContactClick}
-              className="text-gray-600 hover:text-teal-600 transition-colors"
-            >
-              Contact
-            </button>
           </div>
 
           <button 
@@ -83,12 +68,6 @@ export default function Header() {
                 {item.label}
               </button>
             ))}
-            <button 
-              onClick={handleContactClick}
-              className="block w-full text-left py-2 text-gray-600 hover:text-teal-600 transition-colors"
-            >
-              Contact
-            </button>
           </div>
         )}
       </nav>

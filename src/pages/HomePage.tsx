@@ -4,7 +4,6 @@ import WhyChooseUs from '../components/home/WhyChooseUs';
 import Stats from '../components/home/Stats';
 import Testimonials from '../components/home/Testimonials';
 import Newsletter from '../components/home/Newsletter';
-import Contact from '../components/Contact';
 
 export default function HomePage() {
   return (
@@ -15,7 +14,6 @@ export default function HomePage() {
       <Stats />
       <Testimonials />
       <Newsletter />
-      <Contact />
     </>
   );
 }
