@@ -10,6 +10,9 @@ import BlogPost from './components/blog/BlogPost';
 import EventsPage from './pages/EventsPage';
 import EventDetails from './components/events/EventDetails';
 import ContactPage from './pages/ContactPage';
+import CareersPage from './pages/CareersPage';
+import NewsletterPage from './pages/NewsletterPage';
+import AboutPage from './pages/AboutPage';
 import Footer from './components/Footer';
 import ScrollToTop from './components/utils/ScrollToTop';
 
@@ -30,6 +33,9 @@ export default function App() {
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetails />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/newsletter" element={<NewsletterPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
         <Footer />
       </div>

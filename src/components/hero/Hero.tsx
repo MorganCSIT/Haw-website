@@ -29,18 +29,12 @@ export default function Hero() {
             <p className="text-xl text-white/90 mb-8">
               {content.description}
             </p>
-            <div className="space-x-4">
+            <div>
               <a 
                 href="#contact" 
                 className="inline-block px-8 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
               >
                 Start Your Journey
-              </a>
-              <a 
-                href="#services" 
-                className="inline-block px-8 py-3 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors backdrop-blur-sm"
-              >
-                Learn More
               </a>
             </div>
           </HeroSlide>

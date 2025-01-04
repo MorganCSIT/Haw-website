@@ -1,6 +1,7 @@
-import { Menu, X, Palmtree } from 'lucide-react';
 import { useState } from 'react';
+import { Menu, X, Palmtree } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useClickAway } from '../hooks/useClickAway';
 
 const navigationItems = [
   { path: '/', label: 'Home' },
@@ -17,6 +18,10 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const menuRef = useClickAway(() => {
+    setIsMenuOpen(false);
+  });
 
   const handleNavigation = (path: string) => {
     setIsMenuOpen(false);
@@ -58,7 +63,7 @@ export default function Header() {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4">
+          <div ref={menuRef} className="md:hidden mt-4 space-y-4">
             {navigationItems.map((item) => (
               <button
                 key={item.path}
