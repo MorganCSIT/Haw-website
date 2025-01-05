@@ -74,13 +74,23 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <AuthInput
-              id="password"
-              type="password"
-              label="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div>
+              <AuthInput
+                id="password"
+                type="password"
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div className="mt-1 text-right">
+                <Link
+                  to="/reset-password"
+                  className="text-sm font-medium text-teal-600 hover:text-teal-500"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+            </div>
 
             {error && (
               <AuthError title="Sign in failed">
