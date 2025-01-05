@@ -5,6 +5,7 @@ import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import AccountPage from './pages/AccountPage';
 import VacationsPage from './pages/VacationsPage';
 import PropertyPage from './pages/PropertyPage';
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/vacations" element={<VacationsPage />} />
             <Route path="/property" element={<PropertyPage />} />
