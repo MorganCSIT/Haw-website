@@ -1,24 +1,22 @@
 import { format } from 'date-fns';
-import type { AdminInquiry, CartInquiry } from '../../types/admin';
+import type { CartInquiry } from '../../types/admin';
 
-interface InquiryTableProps {
-  inquiries: AdminInquiry[];
-  cartInquiries: CartInquiry[];
+interface CartInquiryTableProps {
+  inquiries: CartInquiry[];
   isLoading: boolean;
-  onSelect: (inquiry: AdminInquiry | CartInquiry, type: 'general' | 'cart') => void;
-  onStatusUpdate: (id: string, status: string, type: 'general' | 'cart') => void;
+  onSelect: (inquiry: CartInquiry) => void;
+  onStatusUpdate: (id: string, status: string) => void;
 }
 
-export default function InquiryTable({ 
+export default function CartInquiryTable({ 
   inquiries, 
-  cartInquiries,
   isLoading, 
   onSelect,
   onStatusUpdate 
-}: InquiryTableProps) {
+}: CartInquiryTableProps) {
   const statusColors = {
     new: 'bg-yellow-100 text-yellow-800',
-    in_progress: 'bg-red-100 text-red-800',
+    in_progress: 'bg-blue-100 text-blue-800',
     completed: 'bg-green-100 text-green-800',
     archived: 'bg-gray-100 text-gray-800'
   };
@@ -26,19 +24,6 @@ export default function InquiryTable({
   if (isLoading) {
     return <div className="text-center py-8">Loading...</div>;
   }
-
-  // Combine and sort all inquiries by date
-  const allInquiries = [
-    ...inquiries.map(i => ({ ...i, type: 'general' as const })),
-    ...cartInquiries.map(i => ({ 
-      ...i, 
-      type: 'cart' as const,
-      category: 'cart',
-      email: i.user_email
-    }))
-  ].sort((a, b) => 
-    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -50,10 +35,10 @@ export default function InquiryTable({
                 Date & Time
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Name
+                User
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
+                Total Amount
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
@@ -64,28 +49,27 @@ export default function InquiryTable({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {allInquiries.map((inquiry) => (
+            {inquiries.map((inquiry) => (
               <tr 
-                key={`${inquiry.type}-${inquiry.id}`}
+                key={inquiry.id}
                 className="hover:bg-gray-50 cursor-pointer"
-                onClick={() => onSelect(inquiry, inquiry.type)}
+                onClick={() => onSelect(inquiry)}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {format(new Date(inquiry.created_at), 'MMM d, yyyy HH:mm')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{inquiry.name}</div>
-                  <div className="text-sm text-gray-500">{inquiry.email}</div>
+                  <div className="text-sm font-medium text-gray-900">{inquiry.user?.email}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {inquiry.category}
+                  ${inquiry.total_amount}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <select
                     value={inquiry.status}
                     onChange={(e) => {
                       e.stopPropagation();
-                      onStatusUpdate(inquiry.id, e.target.value, inquiry.type);
+                      onStatusUpdate(inquiry.id, e.target.value);
                     }}
                     className={`text-sm font-medium px-3 py-1 rounded-full ${statusColors[inquiry.status as keyof typeof statusColors]}`}
                   >
@@ -99,7 +83,7 @@ export default function InquiryTable({
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      onSelect(inquiry, inquiry.type);
+                      onSelect(inquiry);
                     }}
                     className="text-teal-600 hover:text-teal-900"
                   >

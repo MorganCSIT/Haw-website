@@ -14,3 +14,28 @@ export interface AdminInquiry {
   contact_inquiries?: any[];
   [key: string]: any;
 }
+
+export interface CartInquiryItem {
+  id: string;
+  cart_inquiry_id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantity: number;
+  category: string;
+  created_at: string;
+}
+
+export interface CartInquiry {
+  id: string;
+  user_id: string;
+  user?: {
+    email: string;
+  };
+  status: string;
+  message: string;
+  total_amount: number;
+  created_at: string;
+  updated_at: string;
+  items?: CartInquiryItem[];
+}

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { useEffect } from 'react';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/auth/LoginPage';
@@ -35,31 +35,43 @@ export default function App() {
     <Router>
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/vacations" element={<VacationsPage />} />
-            <Route path="/property" element={<PropertyPage />} />
-            <Route path="/healthcare" element={<HealthcarePage />} />
-            <Route path="/insurance" element={<InsurancePage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-            <Route path="/events" element={<EventsPage />} />
-            <Route path="/events/:id" element={<EventDetails />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/careers" element={<CareersPage />} />
-            <Route path="/newsletter" element={<NewsletterPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/admin/login" element={<AdminLoginPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-          </Routes>
-        </main>
-        <Footer />
+        <Routes>
+          {/* Admin routes without header and footer */}
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+
+          {/* Regular routes with header and footer */}
+          <Route
+            path="*"
+            element={
+              <>
+                <Header />
+                <main className="flex-grow">
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/reset-password" element={<ResetPasswordPage />} />
+                    <Route path="/account" element={<AccountPage />} />
+                    <Route path="/vacations" element={<VacationsPage />} />
+                    <Route path="/property" element={<PropertyPage />} />
+                    <Route path="/healthcare" element={<HealthcarePage />} />
+                    <Route path="/insurance" element={<InsurancePage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/blog/:id" element={<BlogPost />} />
+                    <Route path="/events" element={<EventsPage />} />
+                    <Route path="/events/:id" element={<EventDetails />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/careers" element={<CareersPage />} />
+                    <Route path="/newsletter" element={<NewsletterPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </>
+            }
+          />
+        </Routes>
       </div>
     </Router>
   );

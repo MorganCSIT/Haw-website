@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import AdminHeader from '../components/admin/AdminHeader';
 import InquiryTable from '../components/admin/InquiryTable';
 import InquiryDetails from '../components/admin/InquiryDetails';
+import CartInquiryDetails from '../components/admin/CartInquiryDetails';
 import AdminStats from '../components/admin/AdminStats';
 import InquiryFilters from '../components/admin/filters/InquiryFilters';
 import SalesTips from '../components/admin/SalesTips';
 import { filterInquiries } from '../utils/filterInquiries';
-import type { AdminInquiry } from '../types/admin';
+import type { AdminInquiry, CartInquiry } from '../types/admin';
 
 export default function AdminPage() {
   const [inquiries, setInquiries] = useState<AdminInquiry[]>([]);
-  const [selectedInquiry, setSelectedInquiry] = useState<AdminInquiry | null>(null);
+  const [cartInquiries, setCartInquiries] = useState<CartInquiry[]>([]);
+  const [selectedInquiry, setSelectedInquiry] = useState<AdminInquiry | CartInquiry | null>(null);
+  const [selectedInquiryType, setSelectedInquiryType] = useState<'general' | 'cart'>('general');
   const [isLoading, setIsLoading] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
   const [filters, setFilters] = useState({
@@ -24,9 +26,9 @@ export default function AdminPage() {
   const navigate = useNavigate();
 
   const fetchInquiries = async () => {
-    setIsLoading(true);
     try {
-      const { data, error } = await supabase
+      // Fetch general inquiries
+      const { data: generalData, error: generalError } = await supabase
         .from('inquiries')
         .select(`
           *,
@@ -39,16 +41,20 @@ export default function AdminPage() {
         `)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setInquiries(data || []);
-      
-      // Update selected inquiry if it exists
-      if (selectedInquiry) {
-        const updatedInquiry = data?.find(i => i.id === selectedInquiry.id);
-        if (updatedInquiry) {
-          setSelectedInquiry(updatedInquiry);
-        }
-      }
+      if (generalError) throw generalError;
+      setInquiries(generalData || []);
+
+      // Fetch cart inquiries with user emails
+      const { data: cartData, error: cartError } = await supabase
+        .from('cart_inquiries_with_users')
+        .select(`
+          *,
+          items:cart_inquiry_items(*)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (cartError) throw cartError;
+      setCartInquiries(cartData || []);
     } catch (error) {
       console.error('Error fetching inquiries:', error);
     } finally {
@@ -61,6 +67,13 @@ export default function AdminPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate('/admin/login');
+        return;
+      }
+
+      // Verify admin access
+      if (session.user.email !== 'morgankieffer@gmail.com') {
+        navigate('/');
+        return;
       }
     };
     checkAuth();
@@ -70,10 +83,11 @@ export default function AdminPage() {
     fetchInquiries();
   }, []);
 
-  const handleStatusUpdate = async (id: string, status: string) => {
+  const handleStatusUpdate = async (id: string, status: string, type: 'general' | 'cart') => {
     try {
+      const table = type === 'general' ? 'inquiries' : 'cart_inquiries';
       const { error } = await supabase
-        .from('inquiries')
+        .from(table)
         .update({ status })
         .eq('id', id);
 
@@ -88,32 +102,31 @@ export default function AdminPage() {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const handleInquirySelect = (inquiry: AdminInquiry) => {
+  const handleInquirySelect = (inquiry: AdminInquiry | CartInquiry, type: 'general' | 'cart') => {
     setSelectedInquiry(inquiry);
+    setSelectedInquiryType(type);
     setShowDetails(true);
-  };
-
-  const handleNotesUpdate = async (id: string, notes: string) => {
-    try {
-      const { error } = await supabase
-        .from('inquiries')
-        .update({ notes })
-        .eq('id', id);
-
-      if (error) throw error;
-      await fetchInquiries();
-    } catch (error) {
-      console.error('Error updating notes:', error);
-    }
   };
 
   const filteredInquiries = filterInquiries(inquiries, filters);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminHeader />
       <div className="container mx-auto px-4 py-8">
-        <AdminStats inquiries={filteredInquiries} />
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+          <button
+            onClick={() => {
+              supabase.auth.signOut();
+              navigate('/admin/login');
+            }}
+            className="px-4 py-2 text-sm text-red-600 hover:text-red-700 font-medium"
+          >
+            Sign Out
+          </button>
+        </div>
+
+        <AdminStats inquiries={[...filteredInquiries, ...cartInquiries]} />
         
         <div className="mt-8">
           <InquiryFilters 
@@ -126,6 +139,7 @@ export default function AdminPage() {
           <div className={`${showDetails ? 'hidden lg:block' : ''} lg:col-span-2`}>
             <InquiryTable
               inquiries={filteredInquiries}
+              cartInquiries={cartInquiries}
               isLoading={isLoading}
               onSelect={handleInquirySelect}
               onStatusUpdate={handleStatusUpdate}
@@ -133,11 +147,18 @@ export default function AdminPage() {
           </div>
           <div className={`${!showDetails ? 'hidden lg:block' : ''}`}>
             <div className="sticky top-4">
-              <InquiryDetails
-                inquiry={selectedInquiry}
-                onClose={() => setShowDetails(false)}
-                onNotesUpdate={handleNotesUpdate}
-              />
+              {selectedInquiryType === 'general' ? (
+                <InquiryDetails
+                  inquiry={selectedInquiry as AdminInquiry}
+                  onClose={() => setShowDetails(false)}
+                  onNotesUpdate={async () => {}}
+                />
+              ) : (
+                <CartInquiryDetails
+                  inquiry={selectedInquiry as CartInquiry}
+                  onClose={() => setShowDetails(false)}
+                />
+              )}
               <div className="mt-8">
                 <SalesTips />
               </div>

@@ -1,10 +1,9 @@
 import { AuthError } from '@supabase/supabase-js';
 
 export function getAuthErrorMessage(error: AuthError): string {
-  // Handle specific Supabase error codes
   switch (error.message) {
     case 'Invalid login credentials':
-      return 'Incorrect email or password. Please try again.';
+      return 'Invalid email or password. Please check your credentials and try again.';
     case 'Email not confirmed':
       return 'Please verify your email address before logging in.';
     case 'User already registered':

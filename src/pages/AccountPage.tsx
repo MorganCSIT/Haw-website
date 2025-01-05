@@ -1,11 +1,18 @@
+import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useCart } from '../hooks/useCart';
+import { useProfile } from '../hooks/useProfile';
 import { formatPrice } from '../utils/format';
+import PersonalDetailsModal from '../components/account/PersonalDetailsModal';
+import CartModal from '../components/cart/CartModal';
 
 export default function AccountPage() {
   const { user, signOut } = useAuth();
   const { cart, removeFromCart, updateQuantity } = useCart();
+  const { profile, updateProfile } = useProfile(user?.id);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showCartModal, setShowCartModal] = useState(false);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -30,6 +37,12 @@ export default function AccountPage() {
                   Sign Out
                 </button>
               </div>
+              <button
+                onClick={() => setShowDetailsModal(true)}
+                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+              >
+                {profile ? 'View Personal Details' : 'Add Personal Details'}
+              </button>
             </div>
 
             {/* Shopping Cart */}
@@ -82,8 +95,12 @@ export default function AccountPage() {
                         {formatPrice(cart.total)}
                       </span>
                     </div>
-                    <button className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium">
-                      Proceed to Checkout
+                    <button
+                      onClick={() => setShowCartModal(true)}
+                      disabled={cart.items.length === 0}
+                      className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
+                    >
+                      Send Cart Inquiry
                     </button>
                   </div>
                 </div>
@@ -92,6 +109,18 @@ export default function AccountPage() {
           </div>
         </div>
       </div>
+
+      <PersonalDetailsModal
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        profile={profile}
+        onSave={updateProfile}
+      />
+
+      <CartModal
+        isOpen={showCartModal}
+        onClose={() => setShowCartModal(false)}
+      />
     </div>
   );
 }

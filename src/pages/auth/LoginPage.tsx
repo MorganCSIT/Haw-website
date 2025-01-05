@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
-import { getAuthErrorMessage, isEmailVerificationError } from '../../utils/auth';
+import { getAuthErrorMessage } from '../../utils/auth';
 import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import AuthError from '../../components/auth/AuthError';
@@ -32,20 +32,22 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password
       });
 
       if (error) {
-        if (isEmailVerificationError(error)) {
-          setNeedsVerification(true);
-        } else {
-          setError(getAuthErrorMessage(error));
-        }
+        setError(getAuthErrorMessage(error));
+        return;
+      }
+
+      if (!data.user) {
+        setError('No user data received');
+        return;
       }
     } catch (error: any) {
-      setError(getAuthErrorMessage(error));
+      setError(error.message);
     } finally {
       setLoading(false);
     }
