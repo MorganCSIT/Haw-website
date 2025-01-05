@@ -1,5 +1,5 @@
 import { carePackages } from '../data/carePackages';
-import CarePackageCard from '../components/healthcare/CarePackageCard';
+import PackageCard from '../components/healthcare/PackageCard';
 import CareForm from '../components/healthcare/CareForm';
 
 export default function HealthcarePage() {
@@ -42,7 +42,7 @@ export default function HealthcarePage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {carePackages.map((pkg) => (
-              <CarePackageCard key={pkg.id} package={pkg} />
+              <PackageCard key={pkg.id} package={pkg} />
             ))}
           </div>
         </div>
