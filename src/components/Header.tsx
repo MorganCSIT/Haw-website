@@ -60,16 +60,14 @@ export default function Header() {
               to={user ? '/account' : '/login'}
               className="flex items-center space-x-2 text-gray-600 hover:text-teal-600"
             >
-              <div className="relative">
-                {user ? (
-                  <>
-                    <ShoppingCart className="h-6 w-6" />
-                    <CartCounter />
-                  </>
-                ) : (
-                  <User className="h-6 w-6" />
-                )}
-              </div>
+              {user ? (
+                <div className="relative">
+                  <ShoppingCart className="h-6 w-6" />
+                  <CartCounter />
+                </div>
+              ) : (
+                <User className="h-6 w-6" />
+              )}
               <span className="hidden md:inline">{user ? 'Cart' : 'Account'}</span>
             </Link>
             <button 

@@ -1,6 +1,6 @@
-import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../utils/format';
+import AddToCartButton from '../cart/AddToCartButton';
 import type { CarePackage } from '../../types/healthcare';
 
 interface PackageCardProps {
@@ -44,9 +44,9 @@ export default function PackageCard({ package: pkg }: PackageCardProps) {
           </ul>
         </div>
         
-        <div>
+        <div className="mb-6">
           <h4 className="font-medium text-gray-700 mb-3">Best Suited For:</h4>
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2">
             {pkg.suitable.map((item, index) => (
               <span 
                 key={index}
@@ -58,13 +58,7 @@ export default function PackageCard({ package: pkg }: PackageCardProps) {
           </div>
         </div>
 
-        <button
-          onClick={handleAddToCart}
-          className="w-full flex items-center justify-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
-        >
-          <ShoppingCart className="h-5 w-5 mr-2" />
-          Add to Cart
-        </button>
+        <AddToCartButton onClick={handleAddToCart} />
       </div>
     </div>
   );
