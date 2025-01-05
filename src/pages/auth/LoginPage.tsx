@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, Link } from 'react-router-dom';
+import { Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import { getAuthErrorMessage, isEmailVerificationError } from '../../utils/auth';
@@ -15,6 +15,8 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [needsVerification, setNeedsVerification] = useState(false);
   const { user } = useAuth();
+  const location = useLocation();
+  const message = location.state?.message;
 
   if (user) {
     return <Navigate to="/account" replace />;
@@ -23,31 +25,6 @@ export default function LoginPage() {
   if (needsVerification) {
     return <VerificationMessage email={email} />;
   }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        if (isEmailVerificationError(error)) {
-          setNeedsVerification(true);
-        } else {
-          setError(getAuthErrorMessage(error));
-        }
-      }
-    } catch (error: any) {
-      setError(getAuthErrorMessage(error));
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -65,7 +42,42 @@ export default function LoginPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          {message && (
+            <div className="mb-4 rounded-md bg-green-50 p-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <p className="text-sm font-medium text-green-800">
+                    {message}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            setError('');
+
+            try {
+              const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+              });
+
+              if (error) {
+                if (isEmailVerificationError(error)) {
+                  setNeedsVerification(true);
+                } else {
+                  setError(getAuthErrorMessage(error));
+                }
+              }
+            } catch (error: any) {
+              setError(getAuthErrorMessage(error));
+            } finally {
+              setLoading(false);
+            }
+          }}>
             <AuthInput
               id="email"
               type="email"

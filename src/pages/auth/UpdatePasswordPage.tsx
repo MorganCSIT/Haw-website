@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { getAuthErrorMessage } from '../../utils/auth';
 import AuthInput from '../../components/auth/AuthInput';
@@ -11,17 +11,41 @@ export default function UpdatePasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Check if we have a session
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/login');
+    // Handle the recovery token from the URL
+    const handleRecoveryToken = async () => {
+      const hash = location.hash;
+      if (hash && hash.includes('access_token')) {
+        // Extract the tokens from the URL
+        const hashParams = new URLSearchParams(hash.substring(1));
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+
+        if (accessToken && refreshToken) {
+          // Set the session using the tokens
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          });
+
+          if (error) {
+            setError('Invalid or expired recovery link. Please request a new one.');
+            setTimeout(() => navigate('/reset-password'), 3000);
+          }
+        }
+      } else {
+        // No recovery token found, check if we have a valid session
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate('/login');
+        }
       }
     };
-    checkSession();
-  }, [navigate]);
+
+    handleRecoveryToken();
+  }, [location, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,8 +62,13 @@ export default function UpdatePasswordPage() {
         return;
       }
 
-      // Password updated successfully
-      navigate('/login');
+      // Sign out and redirect to login
+      await supabase.auth.signOut();
+      navigate('/login', { 
+        state: { 
+          message: 'Password updated successfully. Please sign in with your new password.' 
+        }
+      });
     } catch (error: any) {
       setError(getAuthErrorMessage(error));
     } finally {
