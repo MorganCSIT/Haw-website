@@ -7,6 +7,7 @@ import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import AuthError from '../../components/auth/AuthError';
 import VerificationMessage from '../../components/auth/VerificationMessage';
+import ForgotPassword from '../../components/auth/ForgotPassword';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [needsVerification, setNeedsVerification] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { user } = useAuth();
 
   if (user) {
@@ -49,6 +51,24 @@ export default function LoginPage() {
     }
   };
 
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <button
+              onClick={() => setShowForgotPassword(false)}
+              className="text-teal-600 hover:text-teal-500 mb-8"
+            >
+              ← Back to login
+            </button>
+            <ForgotPassword />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -81,6 +101,16 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
+            <div className="flex items-center justify-end">
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
+                className="text-sm font-medium text-teal-600 hover:text-teal-500"
+              >
+                Forgot your password?
+              </button>
+            </div>
 
             {error && (
               <AuthError title="Sign in failed">
