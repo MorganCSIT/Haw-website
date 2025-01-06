@@ -12,7 +12,6 @@ interface ExperienceGridProps {
 export default function ExperienceGrid({ experiences, itemsPerPage = 6, onSelect }: ExperienceGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Reset to first page when experiences change (i.e., when filters are applied)
   useEffect(() => {
     setCurrentPage(1);
   }, [experiences]);
@@ -24,7 +23,6 @@ export default function ExperienceGrid({ experiences, itemsPerPage = 6, onSelect
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to the top of the experiences section
     document.getElementById('experiences')?.scrollIntoView({ 
       behavior: 'smooth',
       block: 'start'
@@ -48,16 +46,17 @@ export default function ExperienceGrid({ experiences, itemsPerPage = 6, onSelect
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {currentExperiences.map((experience) => (
-          <div 
+          <button 
             key={experience.id}
             onClick={() => onSelect(experience)}
-            className="cursor-pointer"
+            className="text-left w-full focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-xl"
           >
             <ExperienceProductCard experience={experience} />
-          </div>
+          </button>
         ))}
       </div>
 
+      {/* Pagination controls */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center space-x-4 mt-12">
           <button

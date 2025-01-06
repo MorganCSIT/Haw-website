@@ -26,7 +26,7 @@ export default function ExperienceDetailsModal({ experience, onClose }: Experien
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 md:p-6"
       onClick={onClose}
     >
       <div 
@@ -48,7 +48,7 @@ export default function ExperienceDetailsModal({ experience, onClose }: Experien
           </button>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{experience.title}</h2>
@@ -79,7 +79,7 @@ export default function ExperienceDetailsModal({ experience, onClose }: Experien
             </ul>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-6 mb-8">
+          <div className="bg-gray-50 rounded-lg p-4 md:p-6 mb-8">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">What to Expect</h3>
             <div className="space-y-4 text-gray-600">
               <p>Our experienced guides will ensure your comfort and safety throughout the experience. All necessary equipment and transportation are included.</p>
