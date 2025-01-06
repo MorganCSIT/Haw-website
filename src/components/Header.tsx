@@ -34,7 +34,8 @@ export default function Header() {
     return location.pathname === path ? 'text-teal-600' : 'text-gray-600 hover:text-teal-600';
   };
 
-  const toggleMenu = () => {
+  const toggleMenu = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event from bubbling
     setIsMenuOpen(!isMenuOpen);
   };
 
@@ -95,6 +96,7 @@ export default function Header() {
           <div 
             ref={menuRef} 
             className="md:hidden mt-4 py-4 border-t border-gray-100"
+            onClick={(e) => e.stopPropagation()} // Prevent clicks from bubbling
           >
             <div className="flex flex-col space-y-4">
               {navigationItems.map((item) => (
