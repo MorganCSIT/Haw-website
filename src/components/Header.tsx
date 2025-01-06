@@ -34,6 +34,10 @@ export default function Header() {
     return location.pathname === path ? 'text-teal-600' : 'text-gray-600 hover:text-teal-600';
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <header className="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
       <nav className="container mx-auto px-6 py-4">
@@ -78,8 +82,8 @@ export default function Header() {
               <span className="hidden md:inline">{user ? 'My Interests' : 'Sign In'}</span>
             </Link>
             <button 
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              onClick={toggleMenu}
               aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -88,22 +92,27 @@ export default function Header() {
         </div>
 
         {isMenuOpen && (
-          <div ref={menuRef} className="md:hidden mt-4 space-y-4">
-            {navigationItems.map((item) => (
+          <div 
+            ref={menuRef} 
+            className="md:hidden mt-4 py-4 border-t border-gray-100"
+          >
+            <div className="flex flex-col space-y-4">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => handleNavigation(item.path)}
+                  className={`text-left py-2 ${isActive(item.path)}`}
+                >
+                  {item.label}
+                </button>
+              ))}
               <button
-                key={item.path}
-                onClick={() => handleNavigation(item.path)}
-                className={`block w-full text-left py-2 ${isActive(item.path)}`}
+                onClick={() => handleNavigation(user ? '/account' : '/login')}
+                className="text-left py-2 text-gray-600 hover:text-teal-600"
               >
-                {item.label}
+                {user ? 'My Interests' : 'Sign In'}
               </button>
-            ))}
-            <button
-              onClick={() => handleNavigation(user ? '/account' : '/login')}
-              className="block w-full text-left py-2 text-gray-600 hover:text-teal-600"
-            >
-              {user ? 'My Interests' : 'Sign In'}
-            </button>
+            </div>
           </div>
         )}
       </nav>
