@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { events } from '../data/events';
-import EventCard from '../components/events/EventCard';
+import EventProductCard from '../components/events/EventProductCard';
 import EventGallery from '../components/events/EventGallery';
 import EventRegistration from '../components/events/EventRegistration';
 import Newsletter from '../components/home/Newsletter';
@@ -47,18 +47,15 @@ export default function EventsPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                onSelect={setSelectedEvent}
-              />
+              <div key={event.id}>
+                <EventProductCard event={event} />
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       <EventGallery />
-      
       <Newsletter />
 
       {selectedEvent && (

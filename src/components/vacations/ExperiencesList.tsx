@@ -1,5 +1,5 @@
 import { experiences } from '../../data/experiences';
-import ExperienceCard from '../experiences/ExperienceCard';
+import ExperienceProductCard from '../experiences/ExperienceProductCard';
 
 interface ExperiencesListProps {
   onExperienceSelect: (title: string) => void;
@@ -17,14 +17,14 @@ export default function ExperiencesList({ onExperienceSelect }: ExperiencesListP
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {experiences.map((experience, index) => (
-            <button 
-              key={index}
-              className="text-left focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-xl"
+          {experiences.map((experience) => (
+            <div 
+              key={experience.id}
+              className="focus-within:ring-2 focus-within:ring-teal-500 rounded-xl"
               onClick={() => onExperienceSelect(experience.title)}
             >
-              <ExperienceCard {...experience} />
-            </button>
+              <ExperienceProductCard experience={experience} />
+            </div>
           ))}
         </div>
       </div>

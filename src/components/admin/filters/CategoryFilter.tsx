@@ -11,7 +11,8 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange }: C
     { value: 'vacation', label: 'Vacation' },
     { value: 'insurance', label: 'Insurance' },
     { value: 'newsletter', label: 'Newsletter' },
-    { value: 'contact', label: 'Contact' }
+    { value: 'contact', label: 'Contact' },
+    { value: 'cart', label: 'Cart' }
   ];
 
   return (

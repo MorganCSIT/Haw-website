@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import { format } from 'date-fns';
 import type { CartInquiry } from '../../types/admin';
+import EmailResponse from './EmailResponse';
 
 interface CartInquiryDetailsProps {
   inquiry: CartInquiry | null;
@@ -131,6 +132,14 @@ export default function CartInquiryDetails({ inquiry, onClose }: CartInquiryDeta
               <span className="text-gray-900 font-medium">{inquiry.status}</span>
             </div>
           </div>
+        </div>
+
+        {/* Email Response Button */}
+        <div className="pt-4">
+          <EmailResponse 
+            email={inquiry.user_email} 
+            subject={`Re: Cart Inquiry #${inquiry.id}`}
+          />
         </div>
       </div>
     </div>

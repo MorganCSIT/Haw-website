@@ -1,5 +1,5 @@
 import { insuranceOptions, hospitals } from '../data/insurance';
-import InsuranceCard from '../components/insurance/InsuranceCard';
+import InsuranceProductCard from '../components/insurance/InsuranceProductCard';
 import HospitalCard from '../components/insurance/HospitalCard';
 import HealthcareFacts from '../components/insurance/HealthcareFacts';
 import ConsultationForm from '../components/insurance/ConsultationForm';
@@ -44,7 +44,7 @@ export default function InsurancePage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {insuranceOptions.map((insurance) => (
-              <InsuranceCard key={insurance.id} insurance={insurance} />
+              <InsuranceProductCard key={insurance.id} insurance={insurance} />
             ))}
           </div>
         </div>

@@ -1,9 +1,20 @@
-import { properties } from '../data/properties';
-import PropertyCard from '../components/property/PropertyCard';
+import { useState } from 'react';
+import { properties, getUniqueLocations, getUniquePropertyTypes } from '../data/properties';
+import PropertyGrid from '../components/property/PropertyGrid';
+import PropertyFilters from '../components/property/PropertyFilters';
 import InvestmentFacts from '../components/property/InvestmentFacts';
 import InvestmentForm from '../components/property/InvestmentForm';
+import type { PropertyFilter } from '../types/property';
+import { filterProperties } from '../utils/propertyFilters';
 
 export default function PropertyPage() {
+  const [filteredProperties, setFilteredProperties] = useState(properties);
+
+  const handleFilterChange = (filters: PropertyFilter) => {
+    const filtered = filterProperties(properties, filters);
+    setFilteredProperties(filtered);
+  };
+
   return (
     <div className="pt-16">
       <section className="relative h-[60vh] min-h-[500px]">
@@ -31,7 +42,7 @@ export default function PropertyPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section id="featured-properties" className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Properties</h2>
@@ -40,11 +51,13 @@ export default function PropertyPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
-            ))}
-          </div>
+          <PropertyFilters
+            onFilterChange={handleFilterChange}
+            locations={getUniqueLocations()}
+            propertyTypes={getUniquePropertyTypes()}
+          />
+
+          <PropertyGrid properties={filteredProperties} itemsPerPage={6} />
         </div>
       </section>
 

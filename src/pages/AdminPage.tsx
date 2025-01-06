@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { deleteInquiry, deleteCartInquiry } from '../lib/api/admin';
 import InquiryTable from '../components/admin/InquiryTable';
 import InquiryDetails from '../components/admin/InquiryDetails';
 import CartInquiryDetails from '../components/admin/CartInquiryDetails';
 import AdminStats from '../components/admin/AdminStats';
 import InquiryFilters from '../components/admin/filters/InquiryFilters';
 import SalesTips from '../components/admin/SalesTips';
-import { filterInquiries } from '../utils/filterInquiries';
+import { filterInquiries, filterCartInquiries } from '../utils/filterInquiries';
 import type { AdminInquiry, CartInquiry } from '../types/admin';
 
 export default function AdminPage() {
@@ -98,6 +99,25 @@ export default function AdminPage() {
     }
   };
 
+  const handleDelete = async (id: string, type: 'general' | 'cart') => {
+    try {
+      const result = type === 'general' 
+        ? await deleteInquiry(id)
+        : await deleteCartInquiry(id);
+
+      if (!result.success) throw result.error;
+      await fetchInquiries();
+      
+      // If the deleted inquiry was selected, clear the selection
+      if (selectedInquiry && selectedInquiry.id === id) {
+        setSelectedInquiry(null);
+        setShowDetails(false);
+      }
+    } catch (error) {
+      console.error('Error deleting inquiry:', error);
+    }
+  };
+
   const handleFilterChange = (key: string, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
@@ -108,7 +128,8 @@ export default function AdminPage() {
     setShowDetails(true);
   };
 
-  const filteredInquiries = filterInquiries(inquiries, filters);
+  const filteredGeneralInquiries = filterInquiries(inquiries, filters);
+  const filteredCartInquiries = filterCartInquiries(cartInquiries, filters);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -126,7 +147,7 @@ export default function AdminPage() {
           </button>
         </div>
 
-        <AdminStats inquiries={[...filteredInquiries, ...cartInquiries]} />
+        <AdminStats inquiries={[...filteredGeneralInquiries, ...filteredCartInquiries]} />
         
         <div className="mt-8">
           <InquiryFilters 
@@ -138,11 +159,12 @@ export default function AdminPage() {
         <div className="mt-8 grid lg:grid-cols-3 gap-8">
           <div className={`${showDetails ? 'hidden lg:block' : ''} lg:col-span-2`}>
             <InquiryTable
-              inquiries={filteredInquiries}
-              cartInquiries={cartInquiries}
+              inquiries={filteredGeneralInquiries}
+              cartInquiries={filteredCartInquiries}
               isLoading={isLoading}
               onSelect={handleInquirySelect}
               onStatusUpdate={handleStatusUpdate}
+              onDelete={handleDelete}
             />
           </div>
           <div className={`${!showDetails ? 'hidden lg:block' : ''}`}>

@@ -1,4 +1,4 @@
-import { investmentFacts } from '../../data/properties';
+import { investmentFacts } from '../../data/investmentFacts';
 
 export default function InvestmentFacts() {
   return (
@@ -12,13 +12,16 @@ export default function InvestmentFacts() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {investmentFacts.map((fact, index) => (
-            <div key={index} className="bg-white p-8 rounded-xl shadow-sm">
-              <fact.icon className="h-12 w-12 text-teal-600 mb-6" />
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">{fact.title}</h3>
-              <p className="text-gray-600">{fact.description}</p>
-            </div>
-          ))}
+          {investmentFacts.map((fact, index) => {
+            const Icon = fact.icon;
+            return (
+              <div key={index} className="bg-white p-8 rounded-xl shadow-sm">
+                <Icon className="h-12 w-12 text-teal-600 mb-6" />
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">{fact.title}</h3>
+                <p className="text-gray-600">{fact.description}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

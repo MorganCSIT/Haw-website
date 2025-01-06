@@ -9,6 +9,7 @@ import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import AccountPage from './pages/AccountPage';
 import VacationsPage from './pages/VacationsPage';
 import PropertyPage from './pages/PropertyPage';
+import PropertyDetailsPage from './pages/PropertyDetailsPage';
 import HealthcarePage from './pages/HealthcarePage';
 import InsurancePage from './pages/InsurancePage';
 import BlogPage from './pages/BlogPage';
@@ -55,6 +56,7 @@ export default function App() {
                     <Route path="/account" element={<AccountPage />} />
                     <Route path="/vacations" element={<VacationsPage />} />
                     <Route path="/property" element={<PropertyPage />} />
+                    <Route path="/property/:id" element={<PropertyDetailsPage />} />
                     <Route path="/healthcare" element={<HealthcarePage />} />
                     <Route path="/insurance" element={<InsurancePage />} />
                     <Route path="/blog" element={<BlogPage />} />

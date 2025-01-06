@@ -10,7 +10,7 @@ interface CartInquiryFormProps {
 
 export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
   const { user } = useAuth();
-  const { cart, clearCart } = useCart();
+  const { cart } = useCart();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -26,7 +26,6 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
       if (!result.success) throw new Error('Failed to submit inquiry');
       
       setStatus('success');
-      clearCart();
       setTimeout(onClose, 2000);
     } catch (error) {
       console.error('Error sending inquiry:', error);
