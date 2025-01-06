@@ -25,11 +25,14 @@ export default function ExperienceDetailsModal({ experience, onClose }: Experien
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 md:p-6">
+      <div 
+        className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}
+      >
         <div className="relative">
           <div 
-            className="h-64 bg-cover bg-center"
+            className="h-48 md:h-64 bg-cover bg-center"
             style={{ backgroundImage: `url(${experience.image})` }}
           >
             <div className="absolute inset-0 bg-black/20" />
@@ -38,15 +41,15 @@ export default function ExperienceDetailsModal({ experience, onClose }: Experien
             onClick={onClose}
             className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm rounded-full text-gray-600 hover:text-gray-900"
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="p-8">
-          <div className="flex justify-between items-start mb-6">
+        <div className="p-6">
+          <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">{experience.title}</h2>
-              <div className="flex items-center space-x-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">{experience.title}</h2>
+              <div className="flex flex-wrap items-center gap-4">
                 <span className="text-2xl font-semibold text-teal-600">
                   {formatPrice(experience.price)}
                 </span>

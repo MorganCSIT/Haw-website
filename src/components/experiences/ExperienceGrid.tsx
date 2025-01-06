@@ -48,11 +48,13 @@ export default function ExperienceGrid({ experiences, itemsPerPage = 6, onSelect
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {currentExperiences.map((experience) => (
-          <ExperienceProductCard
+          <div 
             key={experience.id}
-            experience={experience}
-            onSelect={onSelect}
-          />
+            onClick={() => onSelect(experience)}
+            className="cursor-pointer"
+          >
+            <ExperienceProductCard experience={experience} />
+          </div>
         ))}
       </div>
 

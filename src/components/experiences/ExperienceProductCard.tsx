@@ -4,14 +4,14 @@ import type { Experience } from '../../types/experiences';
 
 interface ExperienceProductCardProps {
   experience: Experience;
-  onSelect: (experience: Experience) => void;
 }
 
-export default function ExperienceProductCard({ experience, onSelect }: ExperienceProductCardProps) {
+export default function ExperienceProductCard({ experience }: ExperienceProductCardProps) {
   const { addToCart } = useCart();
   const Icon = experience.icon;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent modal from opening when clicking the button
     addToCart({
       id: experience.id,
       name: experience.title,
@@ -22,11 +22,10 @@ export default function ExperienceProductCard({ experience, onSelect }: Experien
   };
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full">
       <div 
-        className="h-48 bg-cover bg-center relative cursor-pointer"
+        className="h-48 bg-cover bg-center relative"
         style={{ backgroundImage: `url(${experience.image})` }}
-        onClick={() => onSelect(experience)}
       >
         <div className="absolute inset-0 bg-black/20" />
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full">
@@ -36,10 +35,7 @@ export default function ExperienceProductCard({ experience, onSelect }: Experien
       <div className="p-6">
         <div className="mb-4">
           <div className="flex justify-between items-start mb-2">
-            <h3 
-              className="text-xl font-semibold text-gray-800 cursor-pointer hover:text-teal-600"
-              onClick={() => onSelect(experience)}
-            >
+            <h3 className="text-xl font-semibold text-gray-800">
               {experience.title}
             </h3>
             <span className="text-lg font-semibold text-teal-600">${experience.price}</span>
@@ -57,16 +53,15 @@ export default function ExperienceProductCard({ experience, onSelect }: Experien
             ))}
           </ul>
           {experience.activities.length > 3 && (
-            <button 
-              onClick={() => onSelect(experience)}
-              className="text-sm text-teal-600 hover:text-teal-700 mt-2"
-            >
+            <p className="text-sm text-teal-600 hover:text-teal-700 mt-2">
               View all activities...
-            </button>
+            </p>
           )}
         </div>
 
-        <AddToCartButton onClick={handleAddToCart} />
+        <div onClick={e => e.stopPropagation()}>
+          <AddToCartButton onClick={handleAddToCart} />
+        </div>
       </div>
     </div>
   );
