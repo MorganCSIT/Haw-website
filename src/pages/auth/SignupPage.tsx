@@ -31,6 +31,7 @@ export default function SignupPage() {
         email,
         password,
         options: {
+          // Disable email confirmation for now since we're handling it in the backend
           emailRedirectTo: `${window.location.origin}/account`,
           data: {
             email_confirmed: false
@@ -43,7 +44,7 @@ export default function SignupPage() {
         return;
       }
 
-      // User needs to verify email
+      // Show verification message
       setVerificationSent(true);
       
       // Sign out immediately to prevent access before verification

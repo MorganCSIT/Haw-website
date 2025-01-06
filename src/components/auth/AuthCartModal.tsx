@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 interface AuthCartModalProps {
   isOpen: boolean;
   onClose: () => void;
+  returnUrl?: string;
 }
 
-export default function AuthCartModal({ isOpen, onClose }: AuthCartModalProps) {
+export default function AuthCartModal({ isOpen, onClose, returnUrl = '/selection' }: AuthCartModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -35,13 +36,13 @@ export default function AuthCartModal({ isOpen, onClose }: AuthCartModalProps) {
 
           <div className="space-y-4">
             <Link 
-              to="/login"
+              to={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}
               className="w-full inline-block text-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
             >
               Sign In
             </Link>
             <Link
-              to="/signup"
+              to={`/signup?returnUrl=${encodeURIComponent(returnUrl)}`}
               className="w-full inline-block text-center px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Create Account

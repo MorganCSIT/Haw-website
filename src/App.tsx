@@ -22,6 +22,7 @@ import NewsletterPage from './pages/NewsletterPage';
 import AboutPage from './pages/AboutPage';
 import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
+import SelectionFlow from './pages/SelectionFlow';
 import Footer from './components/Footer';
 import ScrollToTop from './components/utils/ScrollToTop';
 
@@ -37,9 +38,10 @@ export default function App() {
       <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Routes>
-          {/* Admin routes without header and footer */}
+          {/* Routes without header and footer */}
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/selection" element={<SelectionFlow />} />
 
           {/* Regular routes with header and footer */}
           <Route

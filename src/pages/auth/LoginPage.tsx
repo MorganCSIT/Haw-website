@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Navigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import { getAuthErrorMessage } from '../../utils/auth';
@@ -17,9 +17,14 @@ export default function LoginPage() {
   const [needsVerification, setNeedsVerification] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { user } = useAuth();
+  const location = useLocation();
+
+  // Get return URL from query params
+  const searchParams = new URLSearchParams(location.search);
+  const returnUrl = searchParams.get('returnUrl') || '/account';
 
   if (user) {
-    return <Navigate to="/account" replace />;
+    return <Navigate to={returnUrl} replace />;
   }
 
   if (needsVerification) {
@@ -79,7 +84,10 @@ export default function LoginPage() {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
           Or{' '}
-          <Link to="/signup" className="font-medium text-teal-600 hover:text-teal-500">
+          <Link 
+            to={`/signup${returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : ''}`}
+            className="font-medium text-teal-600 hover:text-teal-500"
+          >
             create a new account
           </Link>
         </p>

@@ -46,17 +46,16 @@ export default function ExperienceGrid({ experiences, itemsPerPage = 6, onSelect
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {currentExperiences.map((experience) => (
-          <button 
+          <div 
             key={experience.id}
+            className="focus-within:ring-2 focus-within:ring-teal-500 rounded-xl"
             onClick={() => onSelect(experience)}
-            className="text-left w-full focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-xl"
           >
             <ExperienceProductCard experience={experience} />
-          </button>
+          </div>
         ))}
       </div>
 
-      {/* Pagination controls */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center space-x-4 mt-12">
           <button

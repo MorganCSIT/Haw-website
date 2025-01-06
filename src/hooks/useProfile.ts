@@ -6,10 +6,12 @@ export function useProfile(userId: string | undefined) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [needsProfile, setNeedsProfile] = useState(false);
 
   useEffect(() => {
     if (!userId) {
       setLoading(false);
+      setNeedsProfile(false);
       return;
     }
 
@@ -21,25 +23,25 @@ export function useProfile(userId: string | undefined) {
           .eq('user_id', userId)
           .maybeSingle();
 
-        if (error) {
-          // Only set error if it's not a "no rows returned" error
-          if (!error.message.includes('contains 0 rows')) {
-            throw error;
-          }
-        }
+        if (error) throw error;
 
         setProfile(data);
+        // Set needsProfile if no profile exists or if required fields are missing
+        setNeedsProfile(!data || !data.first_name || !data.last_name || !data.nationality);
         setError(null);
       } catch (err: any) {
         console.error('Error fetching profile:', err);
         setError(err);
         setProfile(null);
+        setNeedsProfile(true);
       } finally {
         setLoading(false);
       }
     };
 
-    // Set up real-time subscription for profile updates
+    fetchProfile();
+
+    // Subscribe to profile changes
     const subscription = supabase
       .channel('profile_changes')
       .on(
@@ -53,16 +55,16 @@ export function useProfile(userId: string | undefined) {
         (payload) => {
           if (payload.eventType === 'DELETE') {
             setProfile(null);
+            setNeedsProfile(true);
           } else {
-            setProfile(payload.new as UserProfile);
+            const newProfile = payload.new as UserProfile;
+            setProfile(newProfile);
+            setNeedsProfile(!newProfile || !newProfile.first_name || !newProfile.last_name || !newProfile.nationality);
           }
         }
       )
       .subscribe();
 
-    fetchProfile();
-
-    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };
@@ -84,6 +86,7 @@ export function useProfile(userId: string | undefined) {
 
       if (error) throw error;
       setProfile(data);
+      setNeedsProfile(false);
       setError(null);
       return data;
     } catch (err: any) {
@@ -93,5 +96,5 @@ export function useProfile(userId: string | undefined) {
     }
   };
 
-  return { profile, loading, error, updateProfile };
+  return { profile, loading, error, updateProfile, needsProfile };
 }

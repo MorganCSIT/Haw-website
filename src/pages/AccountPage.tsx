@@ -1,28 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useCart } from '../hooks/useCart';
 import { useProfile } from '../hooks/useProfile';
-import { formatPrice } from '../utils/format';
 import PersonalDetailsModal from '../components/account/PersonalDetailsModal';
 import CartModal from '../components/cart/CartModal';
+import InterestList from '../components/interests/InterestList';
 
 export default function AccountPage() {
   const { user, signOut } = useAuth();
-  const { cart, removeFromCart, updateQuantity, clearCart } = useCart();
   const { profile, updateProfile } = useProfile(user?.id);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showCartModal, setShowCartModal] = useState(false);
 
+  // Show cart modal automatically when navigating from selection flow
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('showModal') === 'true') {
+      setShowCartModal(true);
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-
-  const handleClearInterests = () => {
-    if (window.confirm('Are you sure you want to clear your interest list? This action cannot be undone.')) {
-      clearCart();
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -52,76 +54,7 @@ export default function AccountPage() {
             </div>
 
             {/* Interest List */}
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">My Interests</h2>
-                {cart.items.length > 0 && (
-                  <button
-                    onClick={handleClearInterests}
-                    className="px-4 py-2 text-sm text-red-600 hover:text-red-700 font-medium"
-                  >
-                    Clear List
-                  </button>
-                )}
-              </div>
-              
-              {cart.items.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">Your interest list is empty</p>
-              ) : (
-                <div className="space-y-6">
-                  {/* Interest Items */}
-                  <div className="divide-y divide-gray-200">
-                    {cart.items.map((item) => (
-                      <div key={item.id} className="py-4 flex justify-between items-center">
-                        <div className="flex-1">
-                          <h3 className="font-medium text-gray-800">{item.name}</h3>
-                          <p className="text-sm text-gray-500">{item.description}</p>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                          <select
-                            value={item.quantity}
-                            onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                            className="border rounded p-1 text-sm"
-                          >
-                            {[1, 2, 3, 4, 5].map((num) => (
-                              <option key={num} value={num}>
-                                {num}
-                              </option>
-                            ))}
-                          </select>
-                          <span className="font-medium">
-                            {formatPrice(item.price * item.quantity)}
-                          </span>
-                          <button
-                            onClick={() => removeFromCart(item.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Interest List Summary */}
-                  <div className="border-t pt-6">
-                    <div className="flex justify-between items-center mb-6">
-                      <span className="text-lg font-medium text-gray-800">Total Value</span>
-                      <span className="text-2xl font-semibold text-gray-800">
-                        {formatPrice(cart.total)}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => setShowCartModal(true)}
-                      disabled={cart.items.length === 0}
-                      className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
-                    >
-                      Submit Interest List
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+            <InterestList />
           </div>
         </div>
       </div>

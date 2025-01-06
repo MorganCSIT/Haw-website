@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../utils/format';
-import { submitCartInquiry } from '../../lib/api/cart';
+import { submitCartInquiry } from '../../lib/api/cart/submission';
 
 interface CartInquiryFormProps {
   onClose: () => void;
@@ -13,27 +13,42 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
   const { cart } = useCart();
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    
+    if (!user) {
+      setError('You must be logged in to submit an inquiry');
+      return;
+    }
+
+    if (cart.items.length === 0) {
+      setError('Your interest list is empty');
+      return;
+    }
     
     setLoading(true);
+    setError(null);
+    setSuccess(false);
+
     try {
       const result = await submitCartInquiry(user.id, cart, message);
       
-      if (!result.success) throw new Error('Failed to submit inquiry');
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to submit inquiry');
+      }
       
-      setStatus('success');
-      // Don't clear the cart here
+      setSuccess(true);
+      
+      // Close modal after success message
       setTimeout(() => {
         onClose();
-        setStatus('idle'); // Reset status for future submissions
       }, 2000);
     } catch (error) {
       console.error('Error sending inquiry:', error);
-      setStatus('error');
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     } finally {
       setLoading(false);
     }
@@ -74,21 +89,23 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
         />
       </div>
 
-      {status === 'success' && (
-        <p className="text-green-600 text-center">
-          Your interest list has been submitted successfully!
-        </p>
+      {error && (
+        <div className="rounded-md bg-red-50 p-4">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
       )}
 
-      {status === 'error' && (
-        <p className="text-red-600 text-center">
-          Failed to submit interest list. Please try again.
-        </p>
+      {success && (
+        <div className="rounded-md bg-green-50 p-4">
+          <p className="text-sm text-green-700">
+            Your interest list has been submitted successfully!
+          </p>
+        </div>
       )}
 
       <button
         type="submit"
-        disabled={loading || status === 'success'}
+        disabled={loading || success}
         className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
       >
         {loading ? 'Submitting...' : 'Submit Interest List'}

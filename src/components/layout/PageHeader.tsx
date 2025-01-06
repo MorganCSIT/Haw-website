@@ -5,18 +5,11 @@ interface PageHeaderProps {
   description: string;
   image: string;
   children?: ReactNode;
-  minHeight?: string;
 }
 
-export default function PageHeader({ 
-  title, 
-  description, 
-  image,
-  children,
-  minHeight = "500px"
-}: PageHeaderProps) {
+export default function PageHeader({ title, description, image, children }: PageHeaderProps) {
   return (
-    <section className="relative" style={{ minHeight }}>
+    <section className="relative h-[70vh] min-h-[500px] max-h-[600px]">
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url("${image}")` }}
@@ -25,12 +18,12 @@ export default function PageHeader({
       </div>
       
       <div className="relative h-full flex items-center">
-        <div className="container mx-auto px-6 py-20">
+        <div className="container mx-auto px-6">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               {title}
             </h1>
-            <p className="text-xl text-white/90 mb-8">
+            <p className="text-lg md:text-xl text-white/90 mb-6">
               {description}
             </p>
             {children}

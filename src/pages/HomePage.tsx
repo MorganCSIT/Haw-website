@@ -1,6 +1,7 @@
 import Hero from '../components/hero/Hero';
+import ValueProposition from '../components/home/ValueProposition';
 import Services from '../components/Services';
-import WhyChooseUs from '../components/home/WhyChooseUs';
+import PartnershipSection from '../components/home/PartnershipSection';
 import Stats from '../components/home/Stats';
 import Testimonials from '../components/home/Testimonials';
 import Newsletter from '../components/home/Newsletter';
@@ -9,8 +10,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ValueProposition />
       <Services />
-      <WhyChooseUs />
+      <PartnershipSection />
       <Stats />
       <Testimonials />
       <Newsletter />
