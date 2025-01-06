@@ -20,7 +20,7 @@ export default function AuthCartModal({ isOpen, onClose }: AuthCartModalProps) {
         </div>
 
         <p className="text-gray-600 mb-8">
-          You need to be signed in to add items to your cart. Please sign in to your existing account or create a new one.
+          You need to be signed in to add items to your interest list. Please sign in to your existing account or create a new one.
         </p>
 
         <div className="space-y-4">

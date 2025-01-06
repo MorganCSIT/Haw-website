@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, Check } from 'lucide-react';
+import { ListPlus, Check } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import AuthCartModal from '../auth/AuthCartModal';
 
@@ -41,12 +41,12 @@ export default function AddToCartButton({ onClick }: AddToCartButtonProps) {
           {isAnimating ? (
             <>
               <Check className="h-5 w-5" />
-              <span>Added to Cart!</span>
+              <span>Added to Interests</span>
             </>
           ) : (
             <>
-              <ShoppingCart className="h-5 w-5" />
-              <span>Add to Cart</span>
+              <ListPlus className="h-5 w-5" />
+              <span>Add to Interests</span>
             </>
           )}
         </div>

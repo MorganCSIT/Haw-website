@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
 import { formatPrice } from '../../utils/format';
@@ -15,7 +15,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!user) return;
     
@@ -26,7 +26,11 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
       if (!result.success) throw new Error('Failed to submit inquiry');
       
       setStatus('success');
-      setTimeout(onClose, 2000);
+      // Don't clear the cart here
+      setTimeout(() => {
+        onClose();
+        setStatus('idle'); // Reset status for future submissions
+      }, 2000);
     } catch (error) {
       console.error('Error sending inquiry:', error);
       setStatus('error');
@@ -38,7 +42,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Cart Summary</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Interest List Summary</h3>
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           {cart.items.map((item) => (
             <div key={item.id} className="flex justify-between py-2">
@@ -51,7 +55,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
             </div>
           ))}
           <div className="border-t mt-2 pt-2 flex justify-between font-medium">
-            <span>Total</span>
+            <span>Total Value</span>
             <span>{formatPrice(cart.total)}</span>
           </div>
         </div>
@@ -72,13 +76,13 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
 
       {status === 'success' && (
         <p className="text-green-600 text-center">
-          Your inquiry has been sent successfully!
+          Your interest list has been submitted successfully!
         </p>
       )}
 
       {status === 'error' && (
         <p className="text-red-600 text-center">
-          Failed to send inquiry. Please try again.
+          Failed to submit interest list. Please try again.
         </p>
       )}
 
@@ -87,7 +91,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
         disabled={loading || status === 'success'}
         className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
       >
-        {loading ? 'Sending...' : 'Send Inquiry'}
+        {loading ? 'Submitting...' : 'Submit Interest List'}
       </button>
     </form>
   );

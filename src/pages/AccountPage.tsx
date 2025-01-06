@@ -18,8 +18,8 @@ export default function AccountPage() {
     return <Navigate to="/login" replace />;
   }
 
-  const handleClearCart = () => {
-    if (window.confirm('Are you sure you want to clear your cart? This action cannot be undone.')) {
+  const handleClearInterests = () => {
+    if (window.confirm('Are you sure you want to clear your interest list? This action cannot be undone.')) {
       clearCart();
     }
   };
@@ -51,25 +51,25 @@ export default function AccountPage() {
               </button>
             </div>
 
-            {/* Shopping Cart */}
+            {/* Interest List */}
             <div className="bg-white rounded-lg shadow-sm p-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">Shopping Cart</h2>
+                <h2 className="text-xl font-semibold text-gray-800">My Interests</h2>
                 {cart.items.length > 0 && (
                   <button
-                    onClick={handleClearCart}
+                    onClick={handleClearInterests}
                     className="px-4 py-2 text-sm text-red-600 hover:text-red-700 font-medium"
                   >
-                    Clear Cart
+                    Clear List
                   </button>
                 )}
               </div>
               
               {cart.items.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">Your cart is empty</p>
+                <p className="text-gray-500 text-center py-8">Your interest list is empty</p>
               ) : (
                 <div className="space-y-6">
-                  {/* Cart Items */}
+                  {/* Interest Items */}
                   <div className="divide-y divide-gray-200">
                     {cart.items.map((item) => (
                       <div key={item.id} className="py-4 flex justify-between items-center">
@@ -103,10 +103,10 @@ export default function AccountPage() {
                     ))}
                   </div>
 
-                  {/* Cart Summary */}
+                  {/* Interest List Summary */}
                   <div className="border-t pt-6">
                     <div className="flex justify-between items-center mb-6">
-                      <span className="text-lg font-medium text-gray-800">Total</span>
+                      <span className="text-lg font-medium text-gray-800">Total Value</span>
                       <span className="text-2xl font-semibold text-gray-800">
                         {formatPrice(cart.total)}
                       </span>
@@ -116,7 +116,7 @@ export default function AccountPage() {
                       disabled={cart.items.length === 0}
                       className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
                     >
-                      Send Cart Inquiry
+                      Submit Interest List
                     </button>
                   </div>
                 </div>

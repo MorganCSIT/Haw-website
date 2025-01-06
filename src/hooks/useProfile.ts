@@ -19,23 +19,53 @@ export function useProfile(userId: string | undefined) {
           .from('user_profiles')
           .select('*')
           .eq('user_id', userId)
-          .maybeSingle(); // Use maybeSingle instead of single to handle no results gracefully
+          .maybeSingle();
 
-        // Only set error if it's not a "no rows returned" error
-        if (error && !error.message.includes('contains 0 rows')) {
-          throw error;
+        if (error) {
+          // Only set error if it's not a "no rows returned" error
+          if (!error.message.includes('contains 0 rows')) {
+            throw error;
+          }
         }
 
         setProfile(data);
+        setError(null);
       } catch (err: any) {
-        setError(err);
         console.error('Error fetching profile:', err);
+        setError(err);
+        setProfile(null);
       } finally {
         setLoading(false);
       }
     };
 
+    // Set up real-time subscription for profile updates
+    const subscription = supabase
+      .channel('profile_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_profiles',
+          filter: `user_id=eq.${userId}`
+        },
+        (payload) => {
+          if (payload.eventType === 'DELETE') {
+            setProfile(null);
+          } else {
+            setProfile(payload.new as UserProfile);
+          }
+        }
+      )
+      .subscribe();
+
     fetchProfile();
+
+    // Cleanup subscription
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [userId]);
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
@@ -54,10 +84,11 @@ export function useProfile(userId: string | undefined) {
 
       if (error) throw error;
       setProfile(data);
+      setError(null);
       return data;
     } catch (err: any) {
-      setError(err);
       console.error('Error updating profile:', err);
+      setError(err);
       throw err;
     }
   };

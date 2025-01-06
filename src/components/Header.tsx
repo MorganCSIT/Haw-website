@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Menu, X, Palmtree, User, ShoppingCart } from 'lucide-react';
+import { Menu, X, Palmtree, Heart, UserCircle } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useClickAway } from '../hooks/useClickAway';
 import { useAuth } from '../hooks/useAuth';
-import CartCounter from './cart/CartCounter';
+import InterestCounter from './interests/InterestCounter';
 
 const navigationItems = [
   { path: '/', label: 'Home' },
@@ -40,7 +40,14 @@ export default function Header() {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2" onClick={() => setIsMenuOpen(false)}>
             <Palmtree className="h-8 w-8 text-teal-600" />
-            <span className="text-2xl font-semibold text-gray-800">Serenity Haven</span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-semibold text-gray-800">Serenity Haven</span>
+              {user && (
+                <span className="text-xs italic text-gray-400 -mt-1">
+                  {user.email}
+                </span>
+              )}
+            </div>
           </Link>
           
           <div className="hidden md:flex space-x-8">
@@ -62,13 +69,13 @@ export default function Header() {
             >
               {user ? (
                 <div className="relative">
-                  <ShoppingCart className="h-6 w-6" />
-                  <CartCounter />
+                  <Heart className="h-6 w-6" />
+                  <InterestCounter />
                 </div>
               ) : (
-                <User className="h-6 w-6" />
+                <UserCircle className="h-6 w-6" />
               )}
-              <span className="hidden md:inline">{user ? 'Cart' : 'Account'}</span>
+              <span className="hidden md:inline">{user ? 'My Interests' : 'Sign In'}</span>
             </Link>
             <button 
               className="md:hidden"
@@ -95,7 +102,7 @@ export default function Header() {
               onClick={() => handleNavigation(user ? '/account' : '/login')}
               className="block w-full text-left py-2 text-gray-600 hover:text-teal-600"
             >
-              {user ? 'Cart' : 'Account'}
+              {user ? 'My Interests' : 'Sign In'}
             </button>
           </div>
         )}
