@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '../i18n';
 
-export type Language = 'en' | 'fr' | 'th';
+export type Language = 'en' | 'fr';
 
 interface LanguageState {
   language: Language;

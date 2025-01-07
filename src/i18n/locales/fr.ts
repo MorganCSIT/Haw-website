@@ -22,49 +22,49 @@ export default {
     },
     valueProposition: {
       title: 'Votre Solution Complète de Vie Assistée en Thaïlande',
-      description: 'Profitez d\'une vie sans souci grâce à nos services de soutien complets conçus pour les retraités et les voyageurs soucieux de leur santé.',
+      description: 'Profitez d\'une vie sans souci grâce à nos services de soutien complets conçus pour les retraités et les voyageurs.',
       features: {
         support: {
           title: 'Support Complet',
-          description: 'Un partenaire de confiance pour vos besoins en santé, assurance, immobilier et style de vie en Thaïlande.'
+          description: 'Un partenaire de confiance pour tous vos besoins en Thaïlande.'
         },
         care: {
           title: 'Soins Personnalisés',
-          description: 'Assistance adaptée aux besoins de santé et de mobilité, pour une tranquillité d\'esprit totale.'
+          description: 'Une assistance adaptée à vos besoins spécifiques.'
         },
         guidance: {
           title: 'Conseils d\'Experts',
-          description: 'Naviguez dans les systèmes de santé, juridiques et immobiliers thaïlandais avec notre expertise locale.'
+          description: 'Une expertise locale pour vous guider dans vos démarches.'
         },
         community: {
           title: 'Intégration Communautaire',
-          description: 'Rejoignez une communauté d\'expatriés dynamique avec des événements sociaux et culturels réguliers.'
+          description: 'Rejoignez une communauté dynamique d\'expatriés.'
         }
       }
     },
     services: {
       title: 'Nos Services',
-      description: 'Nous fournissons un soutien complet pour rendre votre transition à Phuket fluide et agréable.',
+      description: 'Nous fournissons un accompagnement complet pour faciliter votre installation à Phuket.',
       healthcare: {
         title: 'Support Médical',
-        description: 'Accès aux services de santé premium et assistance pour naviguer dans le système de santé thaïlandais.'
+        description: 'Accès aux meilleurs services de santé avec assistance complète.'
       },
       legal: {
         title: 'Juridique & Assurance',
-        description: 'Assistance complète pour les visas, l\'assurance santé et toutes les questions juridiques pour une transition sans souci.'
+        description: 'Accompagnement pour les visas, assurances et démarches légales.'
       },
       vacation: {
         title: 'Vacances Assistées',
-        description: 'Expériences de vacances personnalisées avec support complet, incluant transport, hébergement et assistance médicale si nécessaire.'
+        description: 'Des séjours sur mesure avec support complet.'
       },
       property: {
         title: 'Investissement Immobilier',
-        description: 'Conseils d\'experts pour trouver et investir dans votre propriété de retraite idéale dans les meilleurs endroits de Phuket.'
+        description: 'Conseils experts pour vos investissements immobiliers.'
       }
     },
     partnerships: {
-      title: 'Partenariats de Confiance',
-      description: 'Nous travaillons avec les meilleurs prestataires de santé et promoteurs immobiliers de Thaïlande pour garantir un service de la plus haute qualité.',
+      title: 'Nos Partenaires de Confiance',
+      description: 'Nous collaborons avec les meilleurs établissements de Thaïlande pour vous garantir des services d\'excellence.',
       partners: {
         hospital: {
           name: 'Hôpital de Bangkok Phuket',
@@ -80,15 +80,58 @@ export default {
         }
       }
     },
+    testimonials: {
+      title: 'Témoignages de nos Clients',
+      description: 'Découvrez les expériences vécues par ceux qui nous ont fait confiance',
+      testimonials: {
+        healthcare: {
+          text: 'Un accompagnement exceptionnel pour notre installation. L\'équipe a tout géré, de la recherche de villa à la mise en place des soins médicaux.',
+          author: 'Jean et Marie Dupont',
+          location: 'France'
+        },
+        vacation: {
+          text: 'Le service de vacances assistées était parfait pour mes parents âgés. Un soin professionnel tout en profitant du paradis.',
+          author: 'Pierre Martin',
+          location: 'Belgique'
+        },
+        investment: {
+          text: 'La meilleure décision d\'investissement que nous ayons prise. Leur service de gestion immobilière rend tout simple.',
+          author: 'Sophie et Robert Laurent',
+          location: 'Suisse'
+        }
+      }
+    },
+    stats: {
+      clients: {
+        value: '500+',
+        label: 'Clients Satisfaits',
+        description: 'Du monde entier'
+      },
+      property: {
+        value: '₿150M+',
+        label: 'Valeur Immobilière',
+        description: 'En investissements réussis'
+      },
+      experience: {
+        value: '10+',
+        label: 'Années d\'Expérience',
+        description: 'D\'excellence à Phuket'
+      },
+      support: {
+        value: '24/7',
+        label: 'Assistance',
+        description: 'Support permanent'
+      }
+    },
     newsletter: {
       title: 'Restez Informé',
-      description: 'Recevez des informations exclusives sur la vie à Phuket, les opportunités d\'investissement et les conseils lifestyle',
-      placeholder: 'Entrez votre email',
+      description: 'Recevez nos actualités et opportunités exclusives',
+      placeholder: 'Votre email',
       button: 'S\'abonner',
       submitting: 'Inscription...',
-      success: 'Merci de votre inscription ! Vous recevrez bientôt notre prochaine mise à jour.',
-      error: 'Une erreur est survenue. Veuillez réessayer.',
-      footer: 'Rejoignez 5 000+ abonnés. Pas de spam, désabonnement possible à tout moment.'
+      success: 'Merci pour votre inscription !',
+      error: 'Une erreur est survenue.',
+      footer: 'Rejoignez plus de 5 000 abonnés.'
     }
   }
 };

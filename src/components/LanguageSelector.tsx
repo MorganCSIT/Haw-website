@@ -1,12 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Globe } from 'lucide-react';
 import { useLanguage, type Language } from '../store/useLanguage';
 import { useClickAway } from '../hooks/useClickAway';
 
 const languages: { code: Language; label: string; native: string }[] = [
   { code: 'en', label: 'English', native: 'English' },
-  { code: 'fr', label: 'French', native: 'Français' },
-  { code: 'th', label: 'Thai', native: 'ไทย' }
+  { code: 'fr', label: 'French', native: 'Français' }
 ];
 
 export default function LanguageSelector() {
