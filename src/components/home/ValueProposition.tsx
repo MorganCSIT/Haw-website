@@ -1,51 +1,54 @@
+import { useTranslation } from 'react-i18next';
 import { Shield, Heart, Compass, Users } from 'lucide-react';
 
 const benefits = [
   {
     icon: Shield,
-    title: "Full-Service Support",
-    description: "One trusted partner for healthcare, insurance, property, and lifestyle needs in Thailand."
+    key: 'support'
   },
   {
     icon: Heart,
-    title: "Personalized Care",
-    description: "Tailored assistance for healthcare needs and mobility requirements, ensuring peace of mind."
+    key: 'care'
   },
   {
     icon: Compass,
-    title: "Expert Guidance",
-    description: "Navigate Thai healthcare, legal systems, and property markets with our local expertise."
+    key: 'guidance'
   },
   {
     icon: Users,
-    title: "Community Integration",
-    description: "Join a vibrant expat community with regular social events and cultural activities."
+    key: 'community'
   }
 ];
 
 export default function ValueProposition() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Your Complete Assisted Living Solution in Thailand
+            {t('home.valueProposition.title')}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Experience worry-free living with our comprehensive support services designed for retirees and health-conscious travelers.
+            {t('home.valueProposition.description')}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {benefits.map((benefit, index) => {
+          {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
-              <div key={index} className="text-center">
+              <div key={benefit.key} className="text-center">
                 <div className="inline-block p-4 bg-teal-50 rounded-full mb-4">
                   <Icon className="h-8 w-8 text-teal-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600">{benefit.description}</p>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  {t(`home.valueProposition.features.${benefit.key}.title`)}
+                </h3>
+                <p className="text-gray-600">
+                  {t(`home.valueProposition.features.${benefit.key}.description`)}
+                </p>
               </div>
             );
           })}
