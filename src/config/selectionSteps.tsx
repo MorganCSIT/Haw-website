@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { carePackages } from '../data/carePackages';
 import { insuranceOptions } from '../data/insurance';
 import { experiences } from '../data/experiences';
@@ -6,15 +5,9 @@ import { properties, getUniqueLocations, getUniquePropertyTypes } from '../data/
 import { events } from '../data/events';
 import PackageCard from '../components/healthcare/PackageCard';
 import InsuranceProductCard from '../components/insurance/InsuranceProductCard';
-import ExperienceFilters from '../components/vacations/ExperienceFilters';
-import ExperienceGrid from '../components/experiences/ExperienceGrid';
-import PropertyFilters from '../components/property/PropertyFilters';
-import PropertyGrid from '../components/property/PropertyGrid';
+import ExperienceProductCard from '../components/experiences/ExperienceProductCard';
+import PropertyProductCard from '../components/property/PropertyProductCard';
 import EventProductCard from '../components/events/EventProductCard';
-import { filterExperiences } from '../utils/experienceFilters';
-import { filterProperties } from '../utils/propertyFilters';
-import type { ExperienceFilter } from '../components/vacations/ExperienceFilters';
-import type { PropertyFilter } from '../types/property';
 
 export const selectionSteps = [
   {
@@ -42,58 +35,24 @@ export const selectionSteps = [
   {
     title: "Plan Your Experience",
     description: "Choose from our curated experiences",
-    component: () => {
-      const ExperienceStep = () => {
-        const [filteredExperiences, setFilteredExperiences] = useState(experiences);
-        const mobilityLevels = Array.from(new Set(experiences.map(e => e.mobilityLevel)));
-
-        const handleFilterChange = (filters: ExperienceFilter) => {
-          const filtered = filterExperiences(experiences, filters);
-          setFilteredExperiences(filtered);
-        };
-
-        return (
-          <div>
-            <ExperienceFilters
-              onFilterChange={handleFilterChange}
-              mobilityLevels={mobilityLevels}
-            />
-            <ExperienceGrid
-              experiences={filteredExperiences}
-              itemsPerPage={6}
-              onSelect={() => {}}
-            />
-          </div>
-        );
-      };
-      return <ExperienceStep />;
-    }
+    component: () => (
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {experiences.slice(0, 6).map(experience => (
+          <ExperienceProductCard key={experience.id} experience={experience} />
+        ))}
+      </div>
+    )
   },
   {
     title: "Find Your Property",
     description: "Discover your perfect property in Phuket",
-    component: () => {
-      const PropertyStep = () => {
-        const [filteredProperties, setFilteredProperties] = useState(properties);
-
-        const handleFilterChange = (filters: PropertyFilter) => {
-          const filtered = filterProperties(properties, filters);
-          setFilteredProperties(filtered);
-        };
-
-        return (
-          <div>
-            <PropertyFilters
-              onFilterChange={handleFilterChange}
-              locations={getUniqueLocations()}
-              propertyTypes={getUniquePropertyTypes()}
-            />
-            <PropertyGrid properties={filteredProperties} itemsPerPage={6} />
-          </div>
-        );
-      };
-      return <PropertyStep />;
-    }
+    component: () => (
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {properties.slice(0, 6).map(property => (
+          <PropertyProductCard key={property.id} property={property} />
+        ))}
+      </div>
+    )
   },
   {
     title: "Join Community Events",

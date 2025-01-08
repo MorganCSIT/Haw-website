@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, X, ShoppingBag } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useProfile } from '../hooks/useProfile';
-import { useCart } from '../hooks/useCart';
 import { selectionSteps } from '../config/selectionSteps';
 import PersonalDetailsPrompt from '../components/auth/PersonalDetailsPrompt';
 
@@ -13,8 +12,6 @@ export default function SelectionFlow() {
   const { user } = useAuth();
   const { needsProfile, updateProfile } = useProfile(user?.id);
   const [showProfilePrompt, setShowProfilePrompt] = useState(false);
-  const { cart } = useCart();
-  const itemCount = cart.items.length;
 
   // Show profile prompt when needed
   useEffect(() => {
@@ -42,13 +39,6 @@ export default function SelectionFlow() {
     }
   };
 
-  const handleStepClick = (stepIndex: number) => {
-    if (stepIndex !== currentStep) {
-      setCurrentStep(stepIndex);
-      window.scrollTo(0, 0);
-    }
-  };
-
   const NavigationControls = () => (
     <div className="flex justify-between items-center">
       <button
@@ -58,10 +48,6 @@ export default function SelectionFlow() {
         Skip this step
       </button>
       <div className="flex items-center space-x-4">
-        <div className="inline-flex items-center px-4 py-2 bg-white rounded-lg shadow-sm">
-          <ShoppingBag className="h-5 w-5 text-teal-600 mr-2" />
-          <span className="text-gray-700">{itemCount} {itemCount === 1 ? 'item' : 'items'} selected</span>
-        </div>
         <button
           onClick={handleNext}
           className="flex items-center text-teal-600 hover:text-teal-700 font-medium"
@@ -92,20 +78,19 @@ export default function SelectionFlow() {
           {/* Progress bar */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-4">
-              {selectionSteps.map((_, index) => (
-                <button
+              {selectionSteps.map((step, index) => (
+                <div 
                   key={index}
-                  onClick={() => handleStepClick(index)}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors cursor-pointer hover:bg-opacity-90 ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center ${
                     index === currentStep 
                       ? 'bg-teal-600 text-white'
                       : index < currentStep
-                        ? 'bg-teal-200 text-teal-800 hover:bg-teal-300'
-                        : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                        ? 'bg-teal-200 text-teal-800'
+                        : 'bg-gray-200 text-gray-600'
                   }`}
                 >
                   {index + 1}
-                </button>
+                </div>
               ))}
             </div>
             <div className="h-2 bg-gray-200 rounded-full">

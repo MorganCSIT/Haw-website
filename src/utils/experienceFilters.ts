@@ -15,17 +15,10 @@ export function filterExperiences(experiences: Experience[], filters: Experience
 
     // Activity Types filter
     if (filters.activities.length > 0) {
-      // Check if any of the selected activities match the experience title or activities
-      const experienceText = [
-        experience.title.toLowerCase(),
-        experience.description.toLowerCase(),
-        ...experience.activities.map(a => a.toLowerCase())
-      ].join(' ');
-
+      const experienceActivities = experience.activities.join(' ').toLowerCase();
       const hasMatchingActivity = filters.activities.some(activity =>
-        experienceText.includes(activity.toLowerCase())
+        experienceActivities.includes(activity.toLowerCase())
       );
-
       if (!hasMatchingActivity) {
         return false;
       }
