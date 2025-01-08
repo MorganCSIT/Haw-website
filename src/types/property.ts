@@ -23,4 +23,5 @@ export interface PropertyFilter {
   };
   location: string;
   propertyType: string;
+  searchTerm: string;
 }

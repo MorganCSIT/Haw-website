@@ -33,7 +33,7 @@ export default function ExperienceGrid({ experiences, itemsPerPage = 6, onSelect
     return (
       <div className="text-center py-12">
         <p className="text-gray-600">No experiences match your current filters.</p>
-        <p className="text-sm text-gray-500 mt-2">Try adjusting your filters to see more options.</p>
+        <p className="text-sm text-gray-500 mt-2">Try adjusting your search criteria to find more experiences.</p>
       </div>
     );
   }

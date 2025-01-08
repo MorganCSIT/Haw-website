@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Navigate, Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { supabase } from '../../lib/supabase';
 import { getAuthErrorMessage } from '../../utils/auth';
@@ -18,10 +18,11 @@ export default function LoginPage() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Get return URL from query params
   const searchParams = new URLSearchParams(location.search);
-  const returnUrl = searchParams.get('returnUrl') || '/account';
+  const returnUrl = searchParams.get('returnUrl') || '/';
 
   if (user) {
     return <Navigate to={returnUrl} replace />;
@@ -43,16 +44,24 @@ export default function LoginPage() {
       });
 
       if (error) {
-        setError(getAuthErrorMessage(error));
-        return;
+        if (error.message.includes('Invalid login credentials')) {
+          throw new Error('Invalid email or password. Please check your credentials and try again.');
+        } else if (error.message.includes('Email not confirmed')) {
+          setNeedsVerification(true);
+          return;
+        }
+        throw error;
       }
 
       if (!data.user) {
-        setError('No user data received');
-        return;
+        throw new Error('No user data received');
       }
+
+      // Success - redirect to return URL
+      navigate(returnUrl, { replace: true });
     } catch (error: any) {
-      setError(error.message);
+      console.error('Login error:', error);
+      setError(getAuthErrorMessage(error));
     } finally {
       setLoading(false);
     }

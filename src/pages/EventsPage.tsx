@@ -2,40 +2,43 @@ import { useState } from 'react';
 import { events } from '../data/events';
 import EventProductCard from '../components/events/EventProductCard';
 import EventGallery from '../components/events/EventGallery';
-import EventRegistration from '../components/events/EventRegistration';
+import EventFilters, { EventFilter } from '../components/events/EventFilters';
 import Newsletter from '../components/home/Newsletter';
 import type { Event } from '../data/events';
 
 export default function EventsPage() {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [filteredEvents, setFilteredEvents] = useState(events);
+
+  const handleFilterChange = (filters: EventFilter) => {
+    const filtered = events.filter(event => {
+      // Search term filter
+      if (filters.searchTerm) {
+        const searchText = filters.searchTerm.toLowerCase();
+        const eventText = [
+          event.title,
+          event.description,
+          event.location,
+          event.category
+        ].join(' ').toLowerCase();
+        
+        if (!eventText.includes(searchText)) {
+          return false;
+        }
+      }
+
+      // Category filter
+      if (filters.category && event.category !== filters.category) {
+        return false;
+      }
+
+      return true;
+    });
+
+    setFilteredEvents(filtered);
+  };
 
   return (
     <div className="pt-16">
-      <section className="relative h-[60vh] min-h-[500px]">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80")',
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40" />
-        </div>
-        
-        <div className="relative h-full flex items-center">
-          <div className="container mx-auto px-6">
-            <div className="max-w-3xl">
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Community Events
-              </h1>
-              <p className="text-xl text-white/90 mb-8">
-                Join our vibrant community events and activities. From cultural experiences 
-                to social gatherings, there's something for everyone.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -45,25 +48,27 @@ export default function EventsPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((event) => (
-              <div key={event.id}>
-                <EventProductCard event={event} />
-              </div>
-            ))}
-          </div>
+          <EventFilters onFilterChange={handleFilterChange} />
+
+          {filteredEvents.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No events match your current filters.</p>
+              <p className="text-sm text-gray-500 mt-2">Try adjusting your search criteria to find more events.</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredEvents.map((event) => (
+                <div key={event.id}>
+                  <EventProductCard event={event} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       <EventGallery />
       <Newsletter />
-
-      {selectedEvent && (
-        <EventRegistration
-          event={selectedEvent}
-          onClose={() => setSelectedEvent(null)}
-        />
-      )}
     </div>
   );
 }
