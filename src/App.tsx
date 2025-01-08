@@ -23,7 +23,6 @@ import AboutPage from './pages/AboutPage';
 import AdminPage from './pages/AdminPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import SelectionFlow from './pages/SelectionFlow';
-import PartnershipPage from './pages/PartnershipPage';
 import Footer from './components/Footer';
 import ScrollToTop from './components/utils/ScrollToTop';
 
@@ -70,7 +69,6 @@ export default function App() {
                     <Route path="/careers" element={<CareersPage />} />
                     <Route path="/newsletter" element={<NewsletterPage />} />
                     <Route path="/about" element={<AboutPage />} />
-                    <Route path="/partnerships/:id" element={<PartnershipPage />} />
                   </Routes>
                 </main>
                 <Footer />

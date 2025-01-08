@@ -9,24 +9,14 @@ export default function ResetPasswordPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get access token from URL hash
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-
-    if (!accessToken) {
+    // Check if we have the recovery token in the URL
+    const hash = window.location.hash;
+    if (!hash || !hash.includes('access_token')) {
       navigate('/login');
-      return;
     }
-
-    // Set the access token in Supabase
-    supabase.auth.setSession({
-      access_token: accessToken,
-      refresh_token: ''
-    });
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,13 +31,9 @@ export default function ResetPasswordPage() {
 
       if (error) throw error;
 
-      // Clear session after password update
-      await supabase.auth.signOut();
-      
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      // Password updated successfully
+      navigate('/login');
+      // You might want to show a success message here
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -65,40 +51,25 @@ export default function ResetPasswordPage() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {success ? (
-            <div className="rounded-md bg-green-50 p-4">
-              <div className="flex">
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">
-                    Password updated successfully
-                  </h3>
-                  <div className="mt-2 text-sm text-green-700">
-                    Redirecting you to login...
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <AuthInput
-                id="password"
-                type="password"
-                label="New Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <AuthInput
+              id="password"
+              type="password"
+              label="New Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-              {error && (
-                <AuthError title="Password reset failed">
-                  {error}
-                </AuthError>
-              )}
+            {error && (
+              <AuthError title="Password reset failed">
+                {error}
+              </AuthError>
+            )}
 
-              <AuthButton loading={loading}>
-                {loading ? 'Updating password...' : 'Update password'}
-              </AuthButton>
-            </form>
-          )}
+            <AuthButton loading={loading}>
+              {loading ? 'Updating password...' : 'Update password'}
+            </AuthButton>
+          </form>
         </div>
       </div>
     </div>

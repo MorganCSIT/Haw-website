@@ -3,20 +3,6 @@ import type { ExperienceFilter } from '../components/vacations/ExperienceFilters
 
 export function filterExperiences(experiences: Experience[], filters: ExperienceFilter): Experience[] {
   return experiences.filter(experience => {
-    // Search term filter
-    if (filters.searchTerm) {
-      const searchText = filters.searchTerm.toLowerCase();
-      const experienceText = [
-        experience.title,
-        experience.description,
-        ...experience.activities
-      ].join(' ').toLowerCase();
-      
-      if (!experienceText.includes(searchText)) {
-        return false;
-      }
-    }
-
     // Mobility Level filter
     if (filters.mobilityLevels.length > 0 && !filters.mobilityLevels.includes(experience.mobilityLevel)) {
       return false;
@@ -29,6 +15,7 @@ export function filterExperiences(experiences: Experience[], filters: Experience
 
     // Activity Types filter
     if (filters.activities.length > 0) {
+      // Check if any of the selected activities match the experience title or activities
       const experienceText = [
         experience.title.toLowerCase(),
         experience.description.toLowerCase(),

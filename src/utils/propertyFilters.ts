@@ -2,23 +2,7 @@ import type { Property, PropertyFilter } from '../types/property';
 
 export function filterProperties(properties: Property[], filters: PropertyFilter): Property[] {
   return properties.filter(property => {
-    // Search term filter
-    if (filters.searchTerm) {
-      const searchText = filters.searchTerm.toLowerCase();
-      const propertyText = [
-        property.title,
-        property.description,
-        property.location,
-        property.type,
-        ...property.features
-      ].join(' ').toLowerCase();
-      
-      if (!propertyText.includes(searchText)) {
-        return false;
-      }
-    }
-
-    // Ownership Type filter
+    // Ownership Type filter - match if no types selected or property type is in selected types
     if (filters.ownershipTypes.length > 0 && !filters.ownershipTypes.includes(property.ownershipType)) {
       return false;
     }

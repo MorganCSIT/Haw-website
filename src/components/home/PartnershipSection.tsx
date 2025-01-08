@@ -1,95 +1,47 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { partnerships } from '../../data/partnerships';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Building, Award, CheckCircle } from 'lucide-react';
+
+const partnerships = [
+  {
+    icon: Building,
+    name: "Bangkok Hospital Phuket",
+    description: "Access to Thailand's leading healthcare facilities"
+  },
+  {
+    icon: Award,
+    name: "Licensed Insurance Providers",
+    description: "Comprehensive coverage from trusted partners"
+  },
+  {
+    icon: CheckCircle,
+    name: "Certified Property Developers",
+    description: "Quality-assured real estate investments"
+  }
+];
 
 export default function PartnershipSection() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const navigate = useNavigate();
-
-  // Auto-scroll timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % partnerships.length);
-    }, 5000); // Change slide every 5 seconds
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % partnerships.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + partnerships.length) % partnerships.length);
-  };
-
   return (
-    <section className="py-16 bg-gray-50 overflow-hidden">
+    <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Our Partners
+            Trusted Partnerships
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Working with Thailand's leading service providers to ensure a smooth transition to your new life in Phuket.
+            We work with Thailand's leading healthcare providers and property developers to ensure the highest quality service.
           </p>
         </div>
 
-        <div className="relative">
-          <div className="relative h-[400px] overflow-hidden rounded-xl">
-            {partnerships.map((partner, index) => {
-              const Icon = partner.icon;
-              return (
-                <div
-                  key={partner.id}
-                  className={`absolute inset-0 w-full h-full transition-transform duration-500 ${
-                    index === currentSlide ? 'translate-x-0' : index < currentSlide ? '-translate-x-full' : 'translate-x-full'
-                  }`}
-                >
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${partner.image})` }}
-                  >
-                    <div className="absolute inset-0 bg-black/40" />
-                  </div>
-                  <div className="relative h-full flex items-center justify-center">
-                    <div 
-                      className="bg-white/95 backdrop-blur-sm p-8 rounded-xl max-w-xl mx-4 cursor-pointer hover:bg-white transition-colors"
-                      onClick={() => navigate(`/partnerships/${partner.id}`)}
-                    >
-                      <div className="flex items-center justify-between mb-4">
-                        <Icon className="h-12 w-12 text-teal-600" />
-                        <span className="px-4 py-1 bg-teal-100 text-teal-800 text-sm rounded-full">
-                          Learn More
-                        </span>
-                      </div>
-                      <h3 className="text-2xl font-semibold text-gray-800 mb-3">{partner.name}</h3>
-                      <p className="text-gray-600">{partner.description}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Bottom Navigation */}
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center items-center space-x-4">
-            <button
-              onClick={prevSlide}
-              className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-all"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="p-2 rounded-full bg-white/80 hover:bg-white text-gray-800 transition-all"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          {partnerships.map((partner, index) => {
+            const Icon = partner.icon;
+            return (
+              <div key={index} className="bg-white p-8 rounded-xl shadow-sm">
+                <Icon className="h-12 w-12 text-teal-600 mb-6" />
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">{partner.name}</h3>
+                <p className="text-gray-600">{partner.description}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

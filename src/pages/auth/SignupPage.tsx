@@ -31,7 +31,8 @@ export default function SignupPage() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/login`,
+          // Disable email confirmation for now since we're handling it in the backend
+          emailRedirectTo: `${window.location.origin}/account`,
           data: {
             email_confirmed: false
           }
@@ -43,8 +44,10 @@ export default function SignupPage() {
         return;
       }
 
-      // Show verification message and sign out
+      // Show verification message
       setVerificationSent(true);
+      
+      // Sign out immediately to prevent access before verification
       await supabase.auth.signOut();
 
     } catch (error: any) {

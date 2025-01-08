@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Filter, Search } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { formatPrice } from '../../utils/format';
 
 interface ExperienceFiltersProps {
@@ -14,7 +14,6 @@ export interface ExperienceFilter {
     max: number;
   };
   activities: string[];
-  searchTerm: string;
 }
 
 export default function ExperienceFilters({ onFilterChange, mobilityLevels }: ExperienceFiltersProps) {
@@ -22,24 +21,18 @@ export default function ExperienceFilters({ onFilterChange, mobilityLevels }: Ex
   const [filters, setFilters] = useState<ExperienceFilter>({
     mobilityLevels: [],
     priceRange: { min: 0, max: 500 },
-    activities: [],
-    searchTerm: ''
+    activities: []
   });
 
   const activityTypes = [
     'Cultural', 'Wellness', 'Adventure', 'Nature', 'Photography', 'Culinary'
   ];
 
-  const handleFilterChange = (key: keyof ExperienceFilter, value: any) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
-  };
-
   const handleMobilityLevelToggle = (level: string) => {
     const newLevels = filters.mobilityLevels.includes(level)
       ? filters.mobilityLevels.filter(l => l !== level)
       : [...filters.mobilityLevels, level];
+    
     handleFilterChange('mobilityLevels', newLevels);
   };
 
@@ -47,7 +40,14 @@ export default function ExperienceFilters({ onFilterChange, mobilityLevels }: Ex
     const newActivities = filters.activities.includes(activity)
       ? filters.activities.filter(a => a !== activity)
       : [...filters.activities, activity];
+    
     handleFilterChange('activities', newActivities);
+  };
+
+  const handleFilterChange = (key: keyof ExperienceFilter, value: any) => {
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    onFilterChange(newFilters);
   };
 
   const handlePriceChange = (type: 'min' | 'max', value: number) => {
@@ -69,8 +69,7 @@ export default function ExperienceFilters({ onFilterChange, mobilityLevels }: Ex
     const defaultFilters = {
       mobilityLevels: [],
       priceRange: { min: 0, max: 500 },
-      activities: [],
-      searchTerm: ''
+      activities: []
     };
     setFilters(defaultFilters);
     onFilterChange(defaultFilters);
@@ -78,23 +77,10 @@ export default function ExperienceFilters({ onFilterChange, mobilityLevels }: Ex
 
   const activeFilterCount = filters.mobilityLevels.length + 
     filters.activities.length +
-    (filters.priceRange.min > 0 || filters.priceRange.max < 500 ? 1 : 0) +
-    (filters.searchTerm ? 1 : 0);
+    (filters.priceRange.min > 0 || filters.priceRange.max < 500 ? 1 : 0);
 
   return (
     <div className="mb-8">
-      {/* Search Bar */}
-      <div className="relative mb-4">
-        <input
-          type="text"
-          value={filters.searchTerm}
-          onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-          placeholder="Search experiences..."
-          className="w-full px-4 py-3 pl-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-        />
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-      </div>
-
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={() => setIsOpen(!isOpen)}
