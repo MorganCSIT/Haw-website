@@ -1,26 +1,27 @@
-import { Property } from '../../data/properties';
-
+import { Property } from "../../types/property";
 interface PropertyCardProps {
   property: Property;
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div 
+      <div
         className="h-64 bg-cover bg-center"
         style={{ backgroundImage: `url(${property.image})` }}
       />
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">{property.title}</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          {property.title}
+        </h3>
         <div className="flex items-center justify-between mb-4">
           <span className="text-teal-600 font-semibold text-lg">
             {formatPrice(property.price)}
@@ -40,14 +41,16 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         </div>
         <p className="text-gray-600 mb-4">{property.description}</p>
         <div className="flex flex-wrap gap-2">
-          {property.features.slice(0, 3).map((feature, index) => (
-            <span 
-              key={index}
-              className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full"
-            >
-              {feature}
-            </span>
-          ))}
+          {property.features
+            .slice(0, 3)
+            .map((feature: string, index: number) => (
+              <span
+                key={index}
+                className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full"
+              >
+                {feature}
+              </span>
+            ))}
         </div>
       </div>
     </div>
