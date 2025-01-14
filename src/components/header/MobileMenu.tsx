@@ -1,4 +1,4 @@
-import { NavigationItem } from '../../types/navigation';
+import { NavigationItem } from "../../types/navigation";
 
 interface MobileMenuProps {
   items: NavigationItem[];
@@ -8,7 +8,13 @@ interface MobileMenuProps {
   isOpen: boolean;
 }
 
-export default function MobileMenu({ items, isActive, onItemClick, onContactClick, isOpen }: MobileMenuProps) {
+export default function MobileMenu({
+  items,
+  isActive,
+  onItemClick,
+  onContactClick,
+  isOpen,
+}: MobileMenuProps) {
   if (!isOpen) return null;
 
   return (
@@ -22,7 +28,7 @@ export default function MobileMenu({ items, isActive, onItemClick, onContactClic
           {item.label}
         </button>
       ))}
-      <button 
+      <button
         onClick={onContactClick}
         className="block w-full text-left py-2 text-gray-600 hover:text-teal-600 transition-colors"
       >

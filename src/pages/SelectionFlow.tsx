@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, X } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
-import { useProfile } from '../hooks/useProfile';
-import { selectionSteps } from '../config/selectionSteps';
-import PersonalDetailsPrompt from '../components/auth/PersonalDetailsPrompt';
+import { useState, useEffect, SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight, X } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
+import { selectionSteps } from "../config/selectionSteps";
+import PersonalDetailsPrompt from "../components/auth/PersonalDetailsPrompt";
+import CartCounter from "../components/cart/CartCounter";
 
 export default function SelectionFlow() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -22,10 +23,10 @@ export default function SelectionFlow() {
 
   const handleNext = () => {
     if (currentStep < selectionSteps.length - 1) {
-      setCurrentStep(prev => prev + 1);
+      setCurrentStep((prev) => prev + 1);
       window.scrollTo(0, 0);
     } else {
-      navigate('/account?showModal=true');
+      navigate("/account?showModal=true");
     }
   };
 
@@ -34,9 +35,17 @@ export default function SelectionFlow() {
   };
 
   const handleExit = () => {
-    if (window.confirm('Are you sure you want to exit? Your progress will not be saved.')) {
-      navigate('/');
+    if (
+      window.confirm(
+        "Are you sure you want to exit? Your progress will not be saved."
+      )
+    ) {
+      navigate("/");
     }
+  };
+  const handleStepClick = (index: SetStateAction<number>) => {
+    setCurrentStep(index);
+    window.scrollTo(0, 0);
   };
 
   const NavigationControls = () => (
@@ -52,7 +61,9 @@ export default function SelectionFlow() {
           onClick={handleNext}
           className="flex items-center text-teal-600 hover:text-teal-700 font-medium"
         >
-          {currentStep === selectionSteps.length - 1 ? 'View My Interests' : 'Continue'} 
+          {currentStep === selectionSteps.length - 1
+            ? "View My Interests"
+            : "Continue"}
           <ArrowRight className="h-4 w-4 ml-2" />
         </button>
         <button
@@ -76,27 +87,35 @@ export default function SelectionFlow() {
           </div>
 
           {/* Progress bar */}
+          <CartCounter />
+
           <div className="mb-12">
             <div className="flex items-center justify-between mb-4">
-              {selectionSteps.map((step, index) => (
-                <div 
+              {selectionSteps.map((_step, index) => (
+                <div
                   key={index}
+                  onClick={() => handleStepClick(index)}
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    index === currentStep 
-                      ? 'bg-teal-600 text-white'
+                    index === currentStep
+                      ? "bg-teal-600 text-white"
                       : index < currentStep
-                        ? 'bg-teal-200 text-teal-800'
-                        : 'bg-gray-200 text-gray-600'
+                      ? "bg-teal-200 text-teal-800"
+                      : "bg-gray-200 text-gray-600"
                   }`}
                 >
                   {index + 1}
                 </div>
               ))}
             </div>
+
             <div className="h-2 bg-gray-200 rounded-full">
-              <div 
+              <div
                 className="h-full bg-teal-600 rounded-full transition-all duration-300"
-                style={{ width: `${(currentStep / (selectionSteps.length - 1)) * 100}%` }}
+                style={{
+                  width: `${
+                    (currentStep / (selectionSteps.length - 1)) * 100
+                  }%`,
+                }}
               />
             </div>
           </div>
@@ -111,9 +130,7 @@ export default function SelectionFlow() {
             </p>
           </div>
 
-          <div className="mb-12">
-            {selectionSteps[currentStep].component()}
-          </div>
+          <div className="mb-12">{selectionSteps[currentStep].component()}</div>
 
           {/* Bottom Navigation */}
           <div className="mt-12">
