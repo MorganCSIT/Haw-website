@@ -17,7 +17,7 @@ export const carePackages: CarePackage[] = [
     description:
       "Tailored care programs for specific conditions and requirements.",
     icon: UserCog,
-    price: "Custom pricing",
+    price: "Custom pricing 0$",
     features: [
       "Condition-specific care plans",
       "Specialized medical equipment",

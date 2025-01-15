@@ -39,8 +39,8 @@ export const selectionSteps = [
           simple, and stress-free!
         </p>
         <p className="text-xl text-gray-600">
-          Ready to begin? Click “Next” and start exploring your opportunities in
-          Phuket!
+          Ready to begin? Click “Continue” and start exploring your
+          opportunities in Phuket!
         </p>
       </div>
     ),
