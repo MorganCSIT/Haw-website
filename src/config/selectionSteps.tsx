@@ -22,9 +22,6 @@ import type { PropertyFilter } from "../types/property";
 
 export const selectionSteps = [
   {
-    title: "Welcome",
-    description:
-      "Discover a simpler way to explore and select your Phuket essentials.",
     component: () => (
       <div className="text-center p-6 bg-white rounded-lg shadow-lg">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
