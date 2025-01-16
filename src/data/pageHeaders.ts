@@ -15,9 +15,9 @@ export const pageHeaders = {
   insurance: {
     image:
       "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80",
-    title: "Insurance & Legal Support",
+    title: "Insurance Support",
     description:
-      "Navigate Thailand's healthcare system with confidence. Get comprehensive insurance coverage and expert guidance for a worry-free stay.",
+      "Navigate Thailand's system with confidence. Get comprehensive insurance coverage and expert guidance for a worry-free stay.",
   },
   vacations: {
     image:

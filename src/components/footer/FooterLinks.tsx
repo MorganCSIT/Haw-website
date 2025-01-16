@@ -1,5 +1,5 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { scrollToSection } from '../../utils/navigation';
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { scrollToSection } from "../../utils/navigation";
 
 interface LinkSection {
   title: string;
@@ -14,10 +14,10 @@ const sections: LinkSection[] = [
     title: "Services",
     links: [
       { label: "Healthcare", path: "/healthcare" },
-      { label: "Insurance & Legal", path: "/insurance" },
-      { label: "Assisted Vacations", path: "/vacations" },
-      { label: "Property Investment", path: "/property" }
-    ]
+      { label: "Insurance & Visas", path: "/insurance" },
+      { label: "Experiences", path: "/vacations" },
+      { label: "Properties", path: "/property" },
+    ],
   },
   {
     title: "Company",
@@ -25,8 +25,8 @@ const sections: LinkSection[] = [
       { label: "About Us", path: "/about" },
       { label: "Contact", path: "/contact" },
       { label: "Careers", path: "/careers" },
-      { label: "Blog", path: "/blog" }
-    ]
+      { label: "Blog", path: "/blog" },
+    ],
   },
   {
     title: "Community",
@@ -34,9 +34,9 @@ const sections: LinkSection[] = [
       { label: "Events", path: "/events" },
       { label: "Newsletter", path: "/newsletter" },
       { label: "Testimonials", path: "/#testimonials" },
-      { label: "Support", path: "/contact" }
-    ]
-  }
+      { label: "Support", path: "/contact" },
+    ],
+  },
 ];
 
 export default function FooterLinks() {
@@ -45,9 +45,9 @@ export default function FooterLinks() {
 
   const handleClick = (path: string, e: React.MouseEvent) => {
     e.preventDefault();
-    
-    if (path.includes('#')) {
-      const [route, hash] = path.split('#');
+
+    if (path.includes("#")) {
+      const [route, hash] = path.split("#");
       if (location.pathname === route) {
         scrollToSection(hash);
       } else {

@@ -7,11 +7,12 @@ import InterestCounter from "./interests/InterestCounter";
 const navigationItems = [
   { path: "/", label: "Home" },
   { path: "/healthcare", label: "Healthcare" },
-  { path: "/insurance", label: "Insurance & Visas" },
+  { path: "/insurance", label: "Insurance" },
   { path: "/vacations", label: "Experiences" },
   { path: "/property", label: "Properties" },
   { path: "/events", label: "Community" },
-  { path: "/blog", label: "Blog" },
+  { path: "/about", label: "About us" },
+  // { path: "/blog", label: "Blog" },
 ];
 
 export default function Header() {

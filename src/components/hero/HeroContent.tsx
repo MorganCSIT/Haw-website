@@ -4,7 +4,7 @@ export const heroContent = [
       "https://luxurylifestyleawards.com/wp-content/uploads/2023/10/Copy-of-VVP-Photo-Library-Photoshoot-Club-39-01-1-1.png",
     title: "Your Paradise Awaits",
     description:
-      "Experience luxury living and world-class comfort in Phuket's most exclusive locations.",
+      "Experience luxury living and world-class comfort in Phuket's most luxurious locations.",
   },
   {
     image:
@@ -15,16 +15,16 @@ export const heroContent = [
   },
   {
     image:
-      "https://www.phuket-luxuryliving.com/wp-content/uploads/2020/10/pll-banner2.jpg?x88273",
-    title: "Premium Investment",
-    description:
-      "Secure your future with carefully curated property investments in Thailand's most promising locations.",
-  },
-  {
-    image:
       "https://skhai.com/wp-content/uploads/2021/11/pexels-photo-7935873.jpg",
     title: "Exclusive Lifestyle",
     description:
       "From assisted vacations to comprehensive care, experience life in paradise with complete peace of mind.",
+  },
+  {
+    image:
+      "https://www.phuket-luxuryliving.com/wp-content/uploads/2020/10/pll-banner2.jpg?x88273",
+    title: "Premium Property Investments",
+    description:
+      "Secure your future with carefully curated property investments in Thailand's most promising locations.",
   },
 ];
