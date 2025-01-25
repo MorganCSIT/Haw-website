@@ -2,9 +2,13 @@ import { NavigationItem } from "../../types/navigation";
 
 interface MobileMenuProps {
   items: NavigationItem[];
+
   isActive: (path: string) => string;
+
   onItemClick: (path: string) => void;
-  onContactClick: () => void;
+
+  onContactClick: (e: React.MouseEvent) => void;
+
   isOpen: boolean;
 }
 

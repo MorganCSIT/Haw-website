@@ -14,7 +14,7 @@ const sections: LinkSection[] = [
     title: "Services",
     links: [
       { label: "Healthcare", path: "/healthcare" },
-      { label: "Insurance & Visas", path: "/insurance" },
+      { label: "Insurance", path: "/insurance" },
       { label: "Experiences", path: "/vacations" },
       { label: "Properties", path: "/property" },
     ],

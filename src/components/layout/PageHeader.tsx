@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 interface PageHeaderProps {
   title: string;
@@ -7,16 +7,21 @@ interface PageHeaderProps {
   children?: ReactNode;
 }
 
-export default function PageHeader({ title, description, image, children }: PageHeaderProps) {
+export default function PageHeader({
+  title,
+  description,
+  image,
+  children,
+}: PageHeaderProps) {
   return (
     <section className="relative h-[70vh] min-h-[500px] max-h-[600px]">
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url("${image}")` }}
       >
         <div className="absolute inset-0 bg-black/40" />
       </div>
-      
+
       <div className="relative h-full flex items-center">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
