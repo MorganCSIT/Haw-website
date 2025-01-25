@@ -2,13 +2,13 @@ import { useState } from "react";
 import { events } from "../data/events";
 import EventProductCard from "../components/events/EventProductCard";
 import EventGallery from "../components/events/EventGallery";
-import EventRegistration from "../components/events/EventRegistration";
+// import EventRegistration from "../components/events/EventRegistration";
 import Newsletter from "../components/home/Newsletter";
 import type { Event } from "../data/events";
 import { ArrowDown } from "lucide-react";
 
 export default function EventsPage() {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  // const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const scrollToConsultationForm = () => {
     const formElement = document.getElementById("consultationForm");
     if (formElement) {
@@ -68,6 +68,7 @@ export default function EventsPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
               <div key={event.id}>
+                {/* <div key={event.id} onClick={() => setSelectedEvent(event)}> */}
                 <EventProductCard event={event} />
               </div>
             ))}
@@ -75,16 +76,18 @@ export default function EventsPage() {
         </div>
       </section>
 
-      <EventGallery />
-      <Newsletter />
       <div id="consultationForm">
+        <Newsletter />
+      </div>
+      <EventGallery />
+      {/* <div>
         {selectedEvent && (
           <EventRegistration
             event={selectedEvent}
             onClose={() => setSelectedEvent(null)}
           />
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
