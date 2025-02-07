@@ -45,28 +45,7 @@ export const selectionSteps = [
       </div>
     ),
   },
-  {
-    title: "Select Healthcare Package",
-    description: "Choose a healthcare package that suits your needs",
-    component: () => (
-      <div className="grid md:grid-cols-2 gap-8">
-        {carePackages.map((pkg) => (
-          <PackageCard key={pkg.id} package={pkg} />
-        ))}
-      </div>
-    ),
-  },
-  {
-    title: "Choose Insurance Coverage",
-    description: "Select insurance coverage for your stay",
-    component: () => (
-      <div className="grid md:grid-cols-2 gap-8">
-        {insuranceOptions.map((option) => (
-          <InsuranceProductCard key={option.id} insurance={option} />
-        ))}
-      </div>
-    ),
-  },
+
   {
     title: "Plan Your Experience",
     description: "Choose from our curated experiences",
@@ -126,6 +105,28 @@ export const selectionSteps = [
       };
       return <PropertyStep />;
     },
+  },
+  {
+    title: "Select Healthcare Package",
+    description: "Choose a healthcare package that suits your needs",
+    component: () => (
+      <div className="grid md:grid-cols-2 gap-8">
+        {carePackages.map((pkg) => (
+          <PackageCard key={pkg.id} package={pkg} />
+        ))}
+      </div>
+    ),
+  },
+  {
+    title: "Choose Insurance Coverage",
+    description: "Select insurance coverage for your stay",
+    component: () => (
+      <div className="grid md:grid-cols-2 gap-8">
+        {insuranceOptions.map((option) => (
+          <InsuranceProductCard key={option.id} insurance={option} />
+        ))}
+      </div>
+    ),
   },
   {
     title: "Join Community Events",

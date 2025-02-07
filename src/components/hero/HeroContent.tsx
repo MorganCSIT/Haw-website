@@ -1,7 +1,7 @@
 export const heroContent = [
   {
     image:
-      "https://luxurylifestyleawards.com/wp-content/uploads/2023/10/Copy-of-VVP-Photo-Library-Photoshoot-Club-39-01-1-1.png",
+      "https://skhai.com/wp-content/uploads/2021/11/pexels-photo-7935873.jpg",
     title: "Your Paradise Awaits",
     description:
       "Experience luxury living and world-class comfort in Phuket's most luxurious locations.",
@@ -15,7 +15,7 @@ export const heroContent = [
   },
   {
     image:
-      "https://skhai.com/wp-content/uploads/2021/11/pexels-photo-7935873.jpg",
+      "https://luxurylifestyleawards.com/wp-content/uploads/2023/10/Copy-of-VVP-Photo-Library-Photoshoot-Club-39-01-1-1.png",
     title: "Exclusive Lifestyle",
     description:
       "From assisted vacations to comprehensive care, experience life in paradise with complete peace of mind.",

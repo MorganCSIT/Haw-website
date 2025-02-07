@@ -6,12 +6,13 @@ import InterestCounter from "./interests/InterestCounter";
 
 const navigationItems = [
   { path: "/", label: "Home" },
-  { path: "/healthcare", label: "Healthcare" },
-  { path: "/insurance", label: "Insurance" },
+  { path: "/about", label: "About us" },
   { path: "/vacations", label: "Experiences" },
   { path: "/property", label: "Properties" },
+  { path: "/healthcare", label: "Healthcare" },
+  { path: "/insurance", label: "Insurance" },
   { path: "/events", label: "Community" },
-  { path: "/about", label: "About us" },
+
   // { path: "/blog", label: "Blog" },
 ];
 

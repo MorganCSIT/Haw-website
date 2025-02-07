@@ -13,13 +13,13 @@ export default function VacationsPage() {
   };
 
   return (
-    <>
+    <div className="pt-16">
       <section className="relative h-[60vh] min-h-[500px]">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage:
-              'url("https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80")',
+              'url("https://fanclubthailand.co.uk/wp-content/uploads/2022/10/Thailand_older_visitors.jpg")',
           }}
         >
           <div className="absolute inset-0 bg-black/40" />
@@ -29,12 +29,13 @@ export default function VacationsPage() {
           <div className="container mx-auto px-6">
             <div className="max-w-3xl">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Professional Healthcare Support
+                Senior Holiday Experiences in Phuket
               </h1>
               <p className="text-xl text-white/90 mb-8">
-                Comprehensive care solutions tailored to your needs. From basic
-                assistance to specialized medical care, we ensure your comfort
-                and well-being in paradise.
+                Discover a range of engaging experiences tailored for seniors in
+                the beautiful island of Phuket. From relaxing beach walks to
+                cultural tours, we ensure a memorable and enjoyable holiday
+                experience.
               </p>
 
               {/* //button here// */}
@@ -42,7 +43,7 @@ export default function VacationsPage() {
                 onClick={scrollToConsultationForm}
                 className="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors animate-bounce"
               >
-                Request Consultation
+                Learn More
                 {/* Replace ArrowRight with your own imported icon component */}
                 <ArrowDown className="h-4 w-4 ml-2" />
               </button>
@@ -54,6 +55,6 @@ export default function VacationsPage() {
       <div id="consultationForm">
         <ConsultationForm selectedExperience={selectedExperience} />
       </div>
-    </>
+    </div>
   );
 }
