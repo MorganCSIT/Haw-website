@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { Menu, X, Palmtree, Heart, UserCircle } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import InterestCounter from "./interests/InterestCounter";
+import PlanCounter from "./plan/PlanCounter";
 
 const navigationItems = [
   { path: "/", label: "Home" },
@@ -80,13 +80,13 @@ export default function Header() {
               {user ? (
                 <div className="relative">
                   <Heart className="h-6 w-6" />
-                  <InterestCounter />
+                  <PlanCounter />
                 </div>
               ) : (
                 <UserCircle className="h-6 w-6" />
               )}
               <span className="hidden md:inline">
-                {user ? "My Interests" : "Sign In"}
+                {user ? "My Plan" : "Sign In"}
               </span>
             </Link>
             <button
@@ -122,7 +122,7 @@ export default function Header() {
                 onClick={() => handleNavigation(user ? "/account" : "/login")}
                 className="text-left py-2 text-gray-600 hover:text-teal-600"
               >
-                {user ? "My Interests" : "Sign In"}
+                {user ? "My Plan" : "Sign In"}
               </button>
             </div>
           </div>

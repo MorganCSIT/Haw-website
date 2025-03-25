@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { useProfile } from '../hooks/useProfile';
-import PersonalDetailsModal from '../components/account/PersonalDetailsModal';
-import CartModal from '../components/cart/CartModal';
-import InterestList from '../components/interests/InterestList';
+import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
+import PersonalDetailsModal from "../components/account/PersonalDetailsModal";
+import CartModal from "../components/cart/CartModal";
+import PlanList from "../components/plan/PlanList";
 
 export default function AccountPage() {
   const { user, signOut } = useAuth();
@@ -15,10 +15,10 @@ export default function AccountPage() {
   // Show cart modal automatically when navigating from selection flow
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('showModal') === 'true') {
+    if (params.get("showModal") === "true") {
       setShowCartModal(true);
       // Clean up URL
-      window.history.replaceState({}, '', window.location.pathname);
+      window.history.replaceState({}, "", window.location.pathname);
     }
   }, []);
 
@@ -35,7 +35,9 @@ export default function AccountPage() {
             <div className="bg-white rounded-lg shadow-sm p-8">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h1 className="text-2xl font-semibold text-gray-800">My Account</h1>
+                  <h1 className="text-2xl font-semibold text-gray-800">
+                    My Account
+                  </h1>
                   <p className="text-gray-600 mt-1">{user.email}</p>
                 </div>
                 <button
@@ -49,12 +51,12 @@ export default function AccountPage() {
                 onClick={() => setShowDetailsModal(true)}
                 className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
               >
-                {profile ? 'View Personal Details' : 'Add Personal Details'}
+                {profile ? "View Personal Details" : "Add Personal Details"}
               </button>
             </div>
 
-            {/* Interest List */}
-            <InterestList />
+            {/* My Plan */}
+            <PlanList />
           </div>
         </div>
       </div>

@@ -1,7 +1,12 @@
-import { useState } from 'react';
-import { X } from 'lucide-react';
-import { UserProfile } from '../../types/profile';
-import PersonalDetailsForm from './PersonalDetailsForm';
+import { useState } from "react";
+import { X } from "lucide-react";
+import { UserProfile } from "../../types/profile";
+import PersonalDetailsForm from "./PersonalDetailsForm";
+
+interface ErrorMessage {
+  message: string;
+  type: "error" | "success";
+}
 
 interface PersonalDetailsModalProps {
   isOpen: boolean;
@@ -10,8 +15,14 @@ interface PersonalDetailsModalProps {
   onSave: (profile: Partial<UserProfile>) => Promise<void>;
 }
 
-export default function PersonalDetailsModal({ isOpen, onClose, profile, onSave }: PersonalDetailsModalProps) {
+export default function PersonalDetailsModal({
+  isOpen,
+  onClose,
+  profile,
+  onSave,
+}: PersonalDetailsModalProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [feedback, setFeedback] = useState<ErrorMessage | null>(null);
 
   if (!isOpen) return null;
 
@@ -19,62 +30,131 @@ export default function PersonalDetailsModal({ isOpen, onClose, profile, onSave 
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg max-w-2xl w-full p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800">Personal Details</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Personal Details
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             <X className="h-6 w-6" />
           </button>
         </div>
 
         {isEditing ? (
-          <PersonalDetailsForm
-            profile={profile}
-            onSave={async (updatedProfile) => {
-              await onSave(updatedProfile);
-              setIsEditing(false);
-            }}
-            onCancel={() => setIsEditing(false)}
-          />
+          <>
+            {feedback && (
+              <div
+                className={`mb-4 p-4 rounded-lg ${
+                  feedback.type === "error"
+                    ? "bg-red-50 text-red-700"
+                    : "bg-green-50 text-green-700"
+                }`}
+              >
+                {feedback.message}
+              </div>
+            )}
+            <PersonalDetailsForm
+              profile={profile}
+              onSave={async (updatedProfile) => {
+                try {
+                  await onSave(updatedProfile);
+                  setFeedback({
+                    message: "Profile updated successfully!",
+                    type: "success",
+                  });
+                  setTimeout(() => {
+                    setIsEditing(false);
+                    setFeedback(null);
+                  }, 1500);
+                } catch (error) {
+                  setFeedback({
+                    message: "Failed to update profile. Please try again.",
+                    type: "error",
+                  });
+                }
+              }}
+              onCancel={() => {
+                setIsEditing(false);
+                setFeedback(null);
+              }}
+            />
+          </>
         ) : (
           <div className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-500">First Name</label>
-                <p className="mt-1 text-gray-900">{profile?.first_name || '-'}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-500">Last Name</label>
-                <p className="mt-1 text-gray-900">{profile?.last_name || '-'}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-500">Nationality</label>
-                <p className="mt-1 text-gray-900">{profile?.nationality || '-'}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-500">Languages</label>
-                <p className="mt-1 text-gray-900">{profile?.languages || '-'}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-500">Marital Status</label>
-                <p className="mt-1 text-gray-900">{profile?.marital_status || '-'}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-500">Date of Birth</label>
+                <label className="block text-sm font-medium text-gray-500">
+                  First Name
+                </label>
                 <p className="mt-1 text-gray-900">
-                  {profile?.date_of_birth ? new Date(profile.date_of_birth).toLocaleDateString() : '-'}
+                  {profile?.first_name || "-"}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Phone Number</label>
-                <p className="mt-1 text-gray-900">{profile?.phone_number || '-'}</p>
+                <label className="block text-sm font-medium text-gray-500">
+                  Last Name
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.last_name || "-"}
+                </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Emergency Contact</label>
-                <p className="mt-1 text-gray-900">{profile?.emergency_contact || '-'}</p>
+                <label className="block text-sm font-medium text-gray-500">
+                  Nationality
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.nationality || "-"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">
+                  Languages
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.languages || "-"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">
+                  Marital Status
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.marital_status || "-"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">
+                  Date of Birth
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.date_of_birth
+                    ? new Date(profile.date_of_birth).toLocaleDateString()
+                    : "-"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">
+                  Phone Number
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.phone_number || "-"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">
+                  Emergency Contact
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {profile?.emergency_contact || "-"}
+                </p>
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-500">Address</label>
-              <p className="mt-1 text-gray-900">{profile?.address || '-'}</p>
+              <label className="block text-sm font-medium text-gray-500">
+                Address
+              </label>
+              <p className="mt-1 text-gray-900">{profile?.address || "-"}</p>
             </div>
 
             <div className="flex justify-end">

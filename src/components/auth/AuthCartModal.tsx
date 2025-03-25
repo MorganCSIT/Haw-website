@@ -1,5 +1,5 @@
-import { X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface AuthCartModalProps {
   isOpen: boolean;
@@ -7,21 +7,27 @@ interface AuthCartModalProps {
   returnUrl?: string;
 }
 
-export default function AuthCartModal({ isOpen, onClose, returnUrl = '/selection' }: AuthCartModalProps) {
+export default function AuthCartModal({
+  isOpen,
+  onClose,
+  returnUrl = "/selection",
+}: AuthCartModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-800">Sign In Required</h2>
-          <button 
+          <h2 className="text-xl font-semibold text-gray-800">
+            Sign In Required
+          </h2>
+          <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
@@ -31,11 +37,12 @@ export default function AuthCartModal({ isOpen, onClose, returnUrl = '/selection
 
         <div className="p-6">
           <p className="text-gray-600 mb-8">
-            You need to be signed in to add items to your interest list. Please sign in to your existing account or create a new one.
+            You need to be signed in to add items to your plan. Please sign in
+            to your existing account or create a new one.
           </p>
 
           <div className="space-y-4">
-            <Link 
+            <Link
               to={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}
               className="w-full inline-block text-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
             >

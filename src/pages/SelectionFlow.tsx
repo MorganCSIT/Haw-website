@@ -11,15 +11,18 @@ export default function SelectionFlow() {
   const [currentStep, setCurrentStep] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { needsProfile, updateProfile } = useProfile(user?.id);
+  const { profile, loading, updateProfile } = useProfile(user?.id);
   const [showProfilePrompt, setShowProfilePrompt] = useState(false);
 
-  // Show profile prompt when needed
+  // Show profile prompt only if no profile data exists
   useEffect(() => {
-    if (user && needsProfile) {
-      setShowProfilePrompt(true);
-    }
-  }, [user, needsProfile]);
+    const checkProfile = async () => {
+      if (user && !profile && !loading) {
+        setShowProfilePrompt(true);
+      }
+    };
+    checkProfile();
+  }, [user, profile, loading]);
 
   const handleNext = () => {
     if (currentStep < selectionSteps.length - 1) {
@@ -62,7 +65,7 @@ export default function SelectionFlow() {
           className="flex items-center text-teal-600 hover:text-teal-700 font-medium"
         >
           {currentStep === selectionSteps.length - 1
-            ? "View My Interests"
+            ? "View My Plan"
             : "Continue"}
           <ArrowRight className="h-4 w-4 ml-2" />
         </button>

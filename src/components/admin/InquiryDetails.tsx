@@ -1,8 +1,8 @@
-import { X } from 'lucide-react';
-import { format } from 'date-fns';
-import { useState, useEffect, useCallback } from 'react';
-import type { AdminInquiry } from '../../types/admin';
-import EmailResponse from './EmailResponse';
+import { X } from "lucide-react";
+import { format } from "date-fns";
+import { useState, useEffect, useCallback } from "react";
+import type { AdminInquiry } from "../../types/admin";
+import EmailResponse from "./EmailResponse";
 
 interface InquiryDetailsProps {
   inquiry: AdminInquiry | null;
@@ -10,17 +10,21 @@ interface InquiryDetailsProps {
   onNotesUpdate: (id: string, notes: string) => Promise<void>;
 }
 
-export default function InquiryDetails({ inquiry, onClose, onNotesUpdate }: InquiryDetailsProps) {
-  const [notes, setNotes] = useState('');
+export default function InquiryDetails({
+  inquiry,
+  onClose,
+  onNotesUpdate,
+}: InquiryDetailsProps) {
+  const [notes, setNotes] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    setNotes(inquiry?.notes || '');
+    setNotes(inquiry?.notes || "");
   }, [inquiry?.id, inquiry?.notes]);
 
   const handleNotesChange = useCallback(async () => {
     if (!inquiry) return;
-    
+
     setIsSaving(true);
     try {
       await onNotesUpdate(inquiry.id, notes);
@@ -39,8 +43,8 @@ export default function InquiryDetails({ inquiry, onClose, onNotesUpdate }: Inqu
 
   const getInquiryDetails = () => {
     const details = inquiry[`${inquiry.category}_inquiries`]?.[0] || {};
-    return Object.entries(details).filter(([key]) => 
-      !['id', 'inquiry_id', 'created_at'].includes(key)
+    return Object.entries(details).filter(
+      ([key]) => !["id", "inquiry_id", "created_at"].includes(key)
     );
   };
 
@@ -49,7 +53,9 @@ export default function InquiryDetails({ inquiry, onClose, onNotesUpdate }: Inqu
       <div className="p-6 border-b border-gray-200">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-xl font-semibold text-gray-800">{inquiry.name}</h2>
+            <h2 className="text-xl font-semibold text-gray-800">
+              {inquiry.name}
+            </h2>
             <p className="text-gray-600">{inquiry.email}</p>
           </div>
           <button
@@ -63,35 +69,47 @@ export default function InquiryDetails({ inquiry, onClose, onNotesUpdate }: Inqu
 
       <div className="p-6 space-y-6">
         <div>
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Inquiry Details</h3>
+          <h3 className="text-sm font-medium text-gray-500 mb-2">
+            Inquiry Details
+          </h3>
           <div className="bg-gray-50 rounded-lg p-4 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Category:</span>
-              <span className="text-gray-900 font-medium">{inquiry.category}</span>
+              <span className="text-gray-900 font-medium">
+                {inquiry.category}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Date:</span>
               <span className="text-gray-900">
-                {format(new Date(inquiry.created_at), 'PPP p')}
+                {format(new Date(inquiry.created_at), "PPP p")}
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Status:</span>
-              <span className="text-gray-900 font-medium">{inquiry.status}</span>
+              <span className="text-gray-900 font-medium">
+                {inquiry.status}
+              </span>
             </div>
           </div>
         </div>
 
         <div>
-          <h3 className="text-sm font-medium text-gray-500 mb-2">Additional Information</h3>
+          <h3 className="text-sm font-medium text-gray-500 mb-2">
+            Additional Information
+          </h3>
           <div className="bg-gray-50 rounded-lg p-4 space-y-2">
             {getInquiryDetails().map(([key, value]) => (
               <div key={key} className="flex justify-between text-sm">
                 <span className="text-gray-500">
-                  {key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}:
+                  {key
+                    .split("_")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
+                  :
                 </span>
                 <span className="text-gray-900">
-                  {Array.isArray(value) ? value.join(', ') : value}
+                  {Array.isArray(value) ? value.join(", ") : String(value)}
                 </span>
               </div>
             ))}
@@ -118,8 +136,8 @@ export default function InquiryDetails({ inquiry, onClose, onNotesUpdate }: Inqu
         </div>
 
         <div className="pt-4">
-          <EmailResponse 
-            email={inquiry.email} 
+          <EmailResponse
+            email={inquiry.email}
             subject={`Re: ${inquiry.category} Inquiry`}
           />
         </div>

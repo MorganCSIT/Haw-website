@@ -1,8 +1,9 @@
-import { useState, FormEvent } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { useCart } from '../../hooks/useCart';
-import { formatPrice } from '../../utils/format';
-import { submitCartInquiry } from '../../lib/api/cart/submission';
+import { useState, FormEvent } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { useCart } from "../../hooks/useCart";
+import { useProfile } from "../../hooks/useProfile";
+import { formatPrice } from "../../utils/format";
+import { submitCartInquiry } from "../../lib/api/cart/submission";
 
 interface CartInquiryFormProps {
   onClose: () => void;
@@ -11,44 +12,52 @@ interface CartInquiryFormProps {
 export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
   const { user } = useAuth();
   const { cart } = useCart();
-  const [message, setMessage] = useState('');
+  const { profile } = useProfile(user?.id);
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
-      setError('You must be logged in to submit an inquiry');
+      setError("You must be logged in to submit an inquiry");
+      return;
+    }
+
+    if (!profile) {
+      setError("Please complete your personal details before submitting");
       return;
     }
 
     if (cart.items.length === 0) {
-      setError('Your interest list is empty');
+      setError("Your plan is empty");
       return;
     }
-    
+
     setLoading(true);
     setError(null);
     setSuccess(false);
 
     try {
       const result = await submitCartInquiry(user.id, cart, message);
-      
+
       if (!result.success) {
-        throw new Error(result.error || 'Failed to submit inquiry');
+        throw new Error(result.error || "Failed to submit inquiry");
       }
-      
+
       setSuccess(true);
-      
+
       // Close modal after success message
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch (error) {
-      console.error('Error sending inquiry:', error);
-      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      console.error("Error sending inquiry:", error);
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
     } finally {
       setLoading(false);
     }
@@ -57,7 +66,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Interest List Summary</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Plan Summary</h3>
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           {cart.items.map((item) => (
             <div key={item.id} className="flex justify-between py-2">
@@ -98,7 +107,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
       {success && (
         <div className="rounded-md bg-green-50 p-4">
           <p className="text-sm text-green-700">
-            Your interest list has been submitted successfully!
+            Your plan has been submitted successfully!
           </p>
         </div>
       )}
@@ -108,7 +117,7 @@ export default function CartInquiryForm({ onClose }: CartInquiryFormProps) {
         disabled={loading || success}
         className="w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50"
       >
-        {loading ? 'Submitting...' : 'Submit Interest List'}
+        {loading ? "Submitting..." : "Submit Plan"}
       </button>
     </form>
   );
