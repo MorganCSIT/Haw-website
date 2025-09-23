@@ -3,7 +3,6 @@ import { Menu, X, Palmtree, Heart, UserCircle } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import PlanCounter from "./plan/PlanCounter";
-import SkipLink from "./ui/SkipLink";
 
 const navigationItems = [
   { path: "/", label: "Home" },
@@ -40,9 +39,7 @@ export default function Header() {
   };
 
   return (
-    <>
-      <SkipLink />
-      <header className="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+    <header className="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <Link
@@ -131,7 +128,6 @@ export default function Header() {
           </div>
         )}
       </nav>
-      </header>
-    </>
+    </header>
   );
 }
