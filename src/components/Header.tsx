@@ -1,32 +1,52 @@
-import { useState, useRef } from "react";
-import { Menu, X, Palmtree, Heart, UserCircle } from "lucide-react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, Palmtree, Heart, UserCircle, ChevronDown } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import PlanCounter from "./plan/PlanCounter";
 
 const navigationItems = [
   { path: "/", label: "Home" },
   { path: "/about", label: "About us" },
-  { path: "/vacations", label: "Experiences" },
-  { path: "/property", label: "Properties" },
-  { path: "/healthcare", label: "Healthcare" },
-  { path: "/insurance", label: "Insurance" },
-  { path: "/events", label: "Community" },
-
-  // { path: "/blog", label: "Blog" },
+  {
+    label: "Services",
+    children: [
+      { path: "/vacations", label: "Experiences" },
+      { path: "/property", label: "Properties" },
+      { path: "/healthcare", label: "Healthcare" },
+      { path: "/insurance", label: "Insurance" },
+      { path: "/events", label: "Community" },
+    ],
+  },
+  
 ];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
 
-  const handleNavigation = (path: string) => {
+  // Add this new effect to handle route changes
+  useEffect(() => {
     setIsMenuOpen(false);
-    navigate(path);
-  };
+    setIsServicesOpen(false);
+  }, [location.pathname]);
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
 
   const isActive = (path: string) => {
     return location.pathname === path
@@ -37,6 +57,54 @@ export default function Header() {
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const ServicesDropdown = ({ isMobile = false }: { isMobile?: boolean }) => (
+    <div ref={dropdownRef} className={`${isMobile ? 'w-full' : 'relative'}`}>
+      <button
+        className={`flex items-center ${
+          isMobile 
+            ? 'justify-between w-full py-2' 
+            : 'space-x-1'
+        } text-gray-600 hover:text-teal-600`}
+        onClick={() => setIsServicesOpen(!isServicesOpen)}
+        type="button"
+      >
+        <span>Services</span>
+        <ChevronDown 
+          className={`h-4 w-4 transition-transform duration-200 ${
+            isServicesOpen ? 'rotate-180' : ''
+          }`} 
+        />
+      </button>
+      {isServicesOpen && (
+        <div 
+          className={`${
+            isMobile
+              ? 'flex flex-col w-full bg-white border border-gray-100 rounded-md mt-1'
+              : 'absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2'
+          } z-50`}
+        >
+          {navigationItems
+            .find(item => item.label === "Services")
+            ?.children?.map((child) => (
+              <Link
+                key={child.path}
+                to={child.path}
+                className={`block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-teal-600 ${
+                  location.pathname === child.path ? 'text-teal-600' : ''
+                }`}
+                onClick={() => {
+                  setIsServicesOpen(false);
+                  setIsMenuOpen(false);
+                }}
+              >
+                {child.label}
+              </Link>
+            ))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <header className="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
@@ -61,15 +129,13 @@ export default function Header() {
           </Link>
 
           <div className="hidden md:flex space-x-8">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`transition-colors ${isActive(item.path)}`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <Link to="/" className={`transition-colors ${isActive("/")}`}>
+              Home
+            </Link>
+            <Link to="/about" className={`transition-colors ${isActive("/about")}`}>
+              About us
+            </Link>
+            <ServicesDropdown isMobile={false} />
           </div>
 
           <div className="flex items-center space-x-6">
@@ -103,27 +169,25 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Mobile menu */}
         {isMenuOpen && (
-          <div
-            ref={menuRef}
-            className="md:hidden mt-4 py-4 border-t border-gray-100"
-          >
+          <div ref={menuRef} className="md:hidden mt-4 py-4 border-t border-gray-100">
             <div className="flex flex-col space-y-4">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.path}
-                  onClick={() => handleNavigation(item.path)}
-                  className={`text-left py-2 ${isActive(item.path)}`}
-                >
-                  {item.label}
-                </button>
-              ))}
-              <button
-                onClick={() => handleNavigation(user ? "/account" : "/login")}
-                className="text-left py-2 text-gray-600 hover:text-teal-600"
+              <Link
+                to="/"
+                className={`block py-2 ${isActive("/")}`}
+                onClick={() => setIsMenuOpen(false)}
               >
-                {user ? "My Plan" : "Sign In"}
-              </button>
+                Home
+              </Link>
+              <Link
+                to="/about"
+                className={`block py-2 ${isActive("/about")}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About us
+              </Link>
+              <ServicesDropdown isMobile={true} />
             </div>
           </div>
         )}
